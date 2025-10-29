@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Catalogue | VENYORA</title>
+</head>
+<body>
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <a href="index.html">VENYORA</a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
+        </div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="catalogue.html" class="active">CATALOGUE</a></li>
+        <li><a href="index.html#fashion">FASHION</a></li>
+        <li><a href="index.html#favourite">FAVOURITE</a></li>
+        <li><a href="index.html#lifestyle">LIFESTYLE</a></li>
+        <li id="user-auth-links">
+          <a href="signup.html" class="btn">SIGN UP</a>
+        </li>
+        <li id="nav-cart-item" style="display: none;">
+            <a href="cart.html" class="nav__cart"><i class="ri-shopping-cart-2-line"></i> <span id="cart-count">0</span></a>
+        </li>
+      </ul>
+    </nav>
+    <header class="section__container header__container">
+        <h1 class="section__header">Our Collection</h1>
+    </header>
+
+    <section class="section__container">
+        <div class="catalogue__grid" id="product-catalogue">
+        </div>
+    </section>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <title>Shopping Cart | VENYORA</title>
+</head>
+<body>
+  <nav>
+    <div class="nav__header">
+      <div class="nav__logo">
+        <a href="index.html">VENYORA</a>
+      </div>
+      <div class="nav__menu__btn" id="menu-btn">
+        <i class="ri-menu-line"></i>
+      </div>
+    </div>
+    <!-- Navigation Links: Updated for conditional visibility -->
+    <ul class="nav__links" id="nav-links">
+      <li><a href="catalogue.html">CATALOGUE</a></li>
+      <li><a href="contact.html">CONTACT</a></li>
+      <li><a href="#fashion">FASHION</a></li>
+      <li><a href="#favourite">FAVOURITE</a></li>
+      <li><a href="#lifestyle">LIFESTYLE</a></li>
+      <!-- Authentication links, replaced when logged in -->
+      <li id="user-auth-links">
+        <a href="signup.html" class="btn">SIGN UP</a>
+      </li>
+      <!-- CART ITEM: Hidden by default. JS will show it on login. -->
+      <li id="nav-cart-item" style="display: none;">
+          <a href="cart.html" class="nav__cart"><i class="ri-shopping-cart-2-line"></i> <span id="cart-count">0</span></a>
+      </li>
+    </ul>
+  </nav>
+  <main class="section__container cart-page">
+    <h2 class="section__header">Your Shopping Cart</h2>
+    
+    <!-- Wrapper for the main cart content and summary -->
+    <div id="cart-page-wrapper" class="cart-page-content">
+        
+        <!-- Cart Items Container (Left side on desktop) -->
+        <div id="cart-details-container">
+            <!-- Cart Header/Labels -->
+            <div class="cart-header">
+                <div>ITEM</div>
+                <div>PRICE</div>
+                <div>QUANTITY</div>
+                <div>TOTAL</div>
+                <div></div> <!-- For Remove Button -->
+            </div>
+            <div id="cart-container">
+                <!-- Dynamic cart items will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Cart Summary Section (Right side on desktop) -->
+        <div id="cart-summary-section" style="display: none;" class="cart-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-item">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">₹0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Shipping:</span>
+                <span id="cart-shipping">FREE</span>
+            </div>
+            <div class="summary-total">
+                <span>Total:</span>
+                <span id="cart-total">₹0.00</span>
+            </div>
+            <a href="checkout.html" class="btn place-order-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <div id="cart-empty-message" style="display: none; text-align: center; margin-top: 5rem;">
+      <p style="margin-bottom: 2rem;">Your cart is currently empty.</p>
+      <a href="catalogue.html" class="btn">Continue Shopping</a>
+    </div>
+
+  </main>
+  <footer>
+    <div class="section__container footer__container"><div class="footer__col"><div class="footer__logo"><a href="#">FASHION</a></div><p>Complete your style with awesome clothes from us.</p><ul class="footer__socials"><li><a href="#"><i class="ri-facebook-fill"></i></a></li><li><a href="#"><i class="ri-instagram-line"></i></a></li><li><a href="#"><i class="ri-twitter-fill"></i></a></li><li><a href="#"><i class="ri-linkedin-fill"></i></a></li></ul></div><div class="footer__col"><h4>Company</h4><ul class="footer__links"><li><a href="#">About</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Support</a></li><li><a href="#">Careers</a></li></ul></div><div class="footer__col"><h4>Quick Links</h4><ul class="footer__links"><li><a href="#">Store Location</a></li><li><a href="#">Order Tracking</a></li><li><a href="#">Size Guide</a></li><li><a href="#">FAQs</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul class="footer__links"><li><a href="#">Terms & Conditions</a></li><li><a href="#">Privacy Policy</a></li></ul></div></div>
+    <div class="footer__bar">Copyright © 2025 Web Design. All rights reserved.</div>
+  </footer>
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="main.js"></script>
+  <script>
+    // Note: updateCartCount is assumed to be global from main.js
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem('venyora-token');
+        
+        // --- Helper function to render the cart content ---
+        const renderCart = (cartItems) => {
+            const container = document.getElementById('cart-container');
+            const emptyMessage = document.getElementById('cart-empty-message');
+            const wrapper = document.getElementById('cart-page-wrapper');
+            const summarySection = document.getElementById('cart-summary-section');
+            container.innerHTML = '';
+            
+            if (!cartItems || cartItems.length === 0) {
+                emptyMessage.style.display = 'block';
+                wrapper.style.display = 'none';
+                updateCartCount(0);
+                return;
+            }
+
+            emptyMessage.style.display = 'none';
+            wrapper.style.display = 'grid'; // Use grid for the two-column layout
+            summarySection.style.display = 'block';
+            let subtotal = 0;
+
+            cartItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const itemHtml = document.createElement('div');
+                itemHtml.className = 'cart-item';
+                itemHtml.setAttribute('data-product-id', item.productId || item.id);
+                
+                // Updated HTML structure to match the new CSS grid layout
+                itemHtml.innerHTML = `
+                    <div class="cart-item-details">
+                        <div class="cart-item-image">
+                            <img src="${item.imageUrl || item.image}" alt="${item.name}">
+                        </div>
+                        <div style="margin-left: 1rem;">
+                            <strong>${item.name}</strong>
+                            <p>Qty: ${item.quantity}</p> 
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        <span>₹${item.price.toFixed(2)}</span>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <span>${item.quantity}</span> 
+                    </div>
+                    <div class="cart-item-total">
+                        <strong>₹${itemTotal.toFixed(2)}</strong>
+                    </div>
+                    <button class="remove-btn" data-product-id="${item.productId || item.id}"><i class="ri-delete-bin-line"></i></button>
+                `;
+                container.appendChild(itemHtml);
+            });
+
+            // Update Totals
+            document.getElementById('cart-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('cart-total').textContent = `₹${subtotal.toFixed(2)}`;
+            updateCartCount(cartItems.length);
+        };
+        
+        // --- Function to fetch and display the cart ---
+        const fetchAndRenderCart = async () => {
+            if (token) {
+                // Logic for AUTHENTICATED USER (Fetches from API)
+                try {
+                    const response = await fetch('http://localhost:5000/api/cart/user-cart', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    // FIX: Check for 401 Unauthorized to handle expired/invalid tokens
+                    if (response.status === 401 || response.status === 403) {
+                         localStorage.removeItem('venyora-token');
+                         alert('Session expired or invalid. Please log in again.');
+                         window.location.href = 'signup.html'; // Redirect to login
+                         return;
+                    }
+                    
+                    if (response.ok) {
+                        const cart = await response.json();
+                        renderCart(cart.items); 
+                    } else {
+                        // Handle other non-OK status codes (e.g., 500 server error)
+                        console.error('Server error fetching cart:', response.status);
+                        alert('Server error when fetching cart data. See console for details.');
+                        renderCart([]);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user cart:', error);
+                    // Display specific error message and render empty cart
+                    alert('Network error or server connection lost.');
+                    renderCart([]);
+                }
+            } else {
+                // Logic for GUEST USER (Fetches from Local Storage)
+                const guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+                renderCart(guestCart);
+            }
+        };
+
+        // --- Event Listener for removing items ---
+        document.body.addEventListener('click', e => {
+            if (e.target.closest('.remove-btn')) {
+                const removeBtn = e.target.closest('.remove-btn');
+                const productIdToRemove = removeBtn.dataset.productId;
+                
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    if (!token) {
+                        // GUEST CART REMOVAL (Local Storage)
+                        let guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+                        const updatedCart = guestCart.filter(item => item.id !== productIdToRemove);
+                        localStorage.setItem("venyoraGuestCart", JSON.stringify(updatedCart));
+                        fetchAndRenderCart();
+                    } else {
+                        // AUTHENTICATED USER REMOVAL (API Call)
+                        fetch(`http://localhost:5000/api/cart/item/${productIdToRemove}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                fetchAndRenderCart();
+                            } else if (response.status === 401 || response.status === 403) {
+                                localStorage.removeItem('venyora-token');
+                                alert('Session expired. Please log in again.');
+                                window.location.href = 'signup.html';
+                            }
+                             else {
+                                alert('Failed to remove item from authenticated cart.');
+                            }
+                        })
+                        .catch(err => console.error('Error deleting cart item:', err));
+                    }
+                }
+            }
+        });
+        
+        fetchAndRenderCart();
+    });
+  </script>
+</body>
+</html>

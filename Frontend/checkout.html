@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <title>Checkout | VENYORA</title>
+  <!-- Optional: Include Font Awesome for GPay/PhonePe icons (if using symbols/icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* New styles for UPI/Net Banking presentation */
+    .digital-options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .upi-apps {
+        display: flex;
+        gap: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px dashed #ddd;
+    }
+    .upi-app-option {
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        font-weight: 500;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    .upi-app-option:hover, .upi-app-option.selected-app {
+        opacity: 1;
+    }
+    .upi-app-option i {
+        font-size: 2.5rem; /* Larger icon size */
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .net-banking-options select {
+        width: 100%;
+        padding: 0.9rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav__header">
+      <div class="nav__logo">
+        <a href="index.html">VENYORA</a>
+      </div>
+      <div class="nav__menu__btn" id="menu-btn">
+        <i class="ri-menu-line"></i>
+      </div>
+    </div>
+    <ul class="nav__links" id="nav-links">
+      <li><a href="catalogue.html">CATALOGUE</a></li>
+      <li><a href="contact.html">CONTACT</a></li>
+      <li><a href="#fashion">FASHION</a></li>
+      <li><a href="#favourite">FAVOURITE</a></li>
+      <li><a href="#lifestyle">LIFESTYLE</a></li>
+      <li id="user-auth-links">
+        <a href="signup.html" class="btn">SIGN UP</a>
+      </li>
+      <li id="nav-cart-item" style="display: none;">
+        <a href="cart.html" class="nav__cart"><i class="ri-shopping-cart-2-line"></i> <span id="cart-count">0</span></a>
+      </li>
+    </ul>
+  </nav>
+  <main class="section__container checkout-page">
+    <h2 class="section__header">Checkout</h2>
+    <div class="checkout-layout">
+        <div class="customer-info">
+            <h3>Shipping Address</h3>
+            <form id="checkout-form">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="text" placeholder="Street Address" required>
+                <!-- MODIFIED: City Select -->
+                <select id="city-select" required>
+                    <option value="" disabled selected>Select City</option>
+                </select>
+                <div class="form-row">
+                    <!-- MODIFIED: State Select -->
+                    <select id="state-select" required>
+                        <option value="" disabled selected>Select State / Province</option>
+                    </select>
+                    <input type="text" placeholder="Postal / Zip Code" required>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem;">Payment Details</h3>
+            <div class="payment-options">
+                <div class="payment-method selected">
+                    <input type="radio" id="card" name="payment-method" value="card" checked>
+                    <label for="card">Credit / Debit Card</label>
+                </div>
+                <div class="payment-method">
+                    <input type="radio" id="upi" name="payment-method" value="upi">
+                    <label for="upi">UPI / Net Banking</label>
+                </div>
+                <div class="payment-method">
+                    <input type="radio" id="cod" name="payment-method" value="cod">
+                    <label for="cod">Cash on Delivery (COD)</label>
+                </div>
+            </div>
+
+            <form id="card-payment-form" style="margin-top: 1.5rem;">
+                <!-- Card Number with 16-digit enforcement -->
+                <input type="text" placeholder="Card Number" required minlength="16" maxlength="16" pattern="[0-9]{16}">
+                 <div class="form-row">
+                    <!-- MM / YY input field -->
+                    <input type="text" id="expiry-date" placeholder="MM / YY" required inputmode="numeric" maxlength="5" pattern="(0[1-9]|1[0-2])\/\d{2}">
+                    <!-- CVC input field with 3-digit enforcement -->
+                    <input type="text" placeholder="CVV" required minlength="3" maxlength="3" pattern="[0-9]{3}">
+                </div>
+            </form>
+
+            <!-- UPI/Net Banking Options Container (Replaces separate UPI/Netbanking forms) -->
+            <div id="upi-netbanking-container" style="display: none; margin-top: 1.5rem;">
+                <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Choose Digital Payment Method:</p>
+                
+                <div class="digital-options-container">
+                    
+                    <h4 style="font-size: 1rem; color: #555;">UPI Apps</h4>
+                    <div class="upi-apps">
+                        <div class="upi-app-option" data-app="gpay">
+                            <i class="fab fa-google-pay" style="color: #4285F4;"></i>
+                            Google Pay
+                        </div>
+                        <div class="upi-app-option" data-app="phonepe">
+                             <i class="fas fa-mobile-alt" style="color: #673AB7;"></i>
+                            PhonePe
+                        </div>
+                        <div class="upi-app-option" data-app="paytm">
+                            <i class="fas fa-qrcode" style="color: #00B1F5;"></i>
+                            Paytm UPI
+                        </div>
+                    </div>
+                    
+                    <h4 style="font-size: 1rem; color: #555; margin-top: 1rem;">Net Banking</h4>
+                    <div class="net-banking-options">
+                        <!-- FIX: This form element is now used for Net Banking selection/validation -->
+                        <form id="netbanking-selection-form">
+                            <select id="netbanking-select" required>
+                                <option value="" disabled selected>Select Bank</option>
+                                <option value="sbi">State Bank of India (SBI)</option>
+                                <option value="icici">ICICI Bank</option>
+                                <option value="hdfc">HDFC Bank</option>
+                                <option value="axis">Axis Bank</option>
+                                <option value="pnb">Punjab National Bank (PNB)</option>
+                                <option value="other">Other Bank</option>
+                            </select>
+                        </form>
+                    </div>
+                    
+                    <p id="upi-vpa-message" style="font-size: 0.95rem; color: #f44336; margin-top: 1rem;">
+                        *You will be redirected to the selected app or bank for payment after placing the order.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Removed redundant UPI/Net Banking forms -->
+            <form id="upi-payment-form" style="display: none;"></form>
+            <form id="netbanking-payment-form" style="display: none;"></form>
+
+
+        </div>
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div id="summary-items">
+                <p>Loading items...</p>
+            </div>
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="summary-total-price">$0.00</span>
+            </div>
+            <a href="confirmation.html" class="btn place-order-btn">Place Order</a>
+        </div>
+    </div>
+  </main>
+  <footer>
+    <div class="section__container footer__container"><div class="footer__col"><div class="footer__logo"><a href="#">FASHION</a></div><p>Complete your style with awesome clothes from us.</p><ul class="footer__socials"><li><a href="#"><i class="ri-facebook-fill"></i></a></li><li><a href="#"><i class="ri-instagram-line"></i></a></li><li><a href="#"><i class="ri-twitter-fill"></i></a></li><li><a href="#"><i class="ri-linkedin-fill"></i></a></li></ul></div><div class="footer__col"><h4>Company</h4><ul class="footer__links"><li><a href="#">About</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Support</a></li><li><a href="#">Careers</a></li></ul></div><div class="footer__col"><h4>Quick Links</h4><ul class="footer__links"><li><a href="#">Store Location</a></li><li><a href="#">Order Tracking</a></li><li><a href="#">Size Guide</a></li><li><a href="#">FAQs</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul class="footer__links"><li><a href="#">Terms & Conditions</a></li><li><a href="#">Privacy Policy</a></li></ul></div></div>
+    <div class="footer__bar">Copyright © 2025 Web Design. All rights reserved.</div>
+  </footer>
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="main.js"></script>
+  <script>
+    // Note: updateCartCount is assumed to be global from main.js
+
+    // --- State and City Data (Data Source) ---
+    const indianStates = {
+        "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore"],
+        "Arunachal Pradesh": ["Itanagar", "Naharlagun"],
+        "Assam": ["Guwahati", "Silchar", "Dibrugarh"],
+        "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur"],
+        "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur"],
+        "Goa": ["Panaji", "Margao"],
+        "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+        "Haryana": ["Faridabad", "Gurugram", "Panipat", "Ambala"],
+        "Himachal Pradesh": ["Shimla", "Mandi", "Dharamshala"],
+        "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad"],
+        "Karnataka": ["Bengaluru", "Mysore", "Mangalore", "Hubballi"],
+        "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode"],
+        "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Sehore", "Ujjain", "Ashta", "Dewas", "Pachmarhi", "Nepanagar", "Chitrakoot"],
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Chatrapati Sambajinagar", "Jalgaon", "Dhule", "Amravati", "Beed", "Chandrapur", "Kolhapur", "Latur", "Bhandara", "Akola", "Shirdi"],
+        "Manipur": ["Imphal", "Thoubal"],
+        "Meghalaya": ["Shillong", "Tura"],
+        "Mizoram": ["Aizawl", "Lunglei"],
+        "Nagaland": ["Kohima", "Dimapur"],
+        "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela"],
+        "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
+        "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
+        "Sikkim": ["Gangtok", "Namchi"],
+        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli"],
+        "Telangana": ["Hyderabad", "Warangal", "Nizamabad"],
+        "Tripura": ["Agartala", "Udaipur"],
+        "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Varanasi", "Agra"],
+        "Uttarakhand": ["Dehradun", "Haridwar", "Nainital"],
+        "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol"],
+        "Andaman and Nicobar Islands": ["Port Blair"],
+        "Chandigarh": ["Chandigarh"],
+        "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Silvassa"],
+        "Delhi": ["New Delhi", "Old Delhi"],
+        "Jammu and Kashmir": ["Srinagar", "Jammu"],
+        "Ladakh": ["Leh", "Kargil"],
+        "Lakshadweep": ["Kavaratti"],
+        "Puducherry": ["Puducherry", "Karaikal"]
+    };
+
+    // Helper function to insert the slash automatically
+    function formatExpiryDate(input) {
+        let value = input.value;
+        value = value.replace(/\D/g, ''); 
+
+        // If 2 digits are typed, add the slash automatically
+        if (value.length > 2 && value.indexOf('/') === -1) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        
+        // Ensure max length is respected after inserting slash
+        if (value.length > 5) {
+            value = value.substring(0, 5);
+        }
+
+        input.value = value;
+    }
+
+    // Helper function to handle marking a UPI app as selected
+    const handleUpiAppSelection = (e) => {
+        const option = e.target.closest('.upi-app-option');
+        if (option) {
+            document.querySelectorAll('.upi-app-option').forEach(app => app.classList.remove('selected-app'));
+            option.classList.add('selected-app');
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem('venyora-token');
+        const summaryItemsContainer = document.getElementById('summary-items');
+        const summaryTotalPrice = document.getElementById('summary-total-price');
+        const cardPaymentForm = document.getElementById('card-payment-form'); 
+        const cardInputs = document.querySelectorAll('#card-payment-form input');
+        const upiNetbankingContainer = document.getElementById('upi-netbanking-container');
+        const netbankingSelect = document.getElementById('netbanking-select'); // The Select element
+        
+        const stateSelect = document.getElementById('state-select');
+        const citySelect = document.getElementById('city-select');
+        const expiryDateInput = document.getElementById('expiry-date');
+
+        // ATTACHMENT FIX: Add keyup listener for expiry date formatting
+        expiryDateInput.addEventListener('keyup', function() {
+            formatExpiryDate(this);
+        });
+
+        // Add listener for UPI app selection
+        document.querySelector('.upi-apps').addEventListener('click', handleUpiAppSelection);
+
+        // --- State/City Logic ---
+        const populateStates = () => {
+            const sortedStates = Object.keys(indianStates).sort();
+            sortedStates.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        };
+
+        const updateCities = () => {
+            const selectedState = stateSelect.value;
+            citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+            citySelect.disabled = true;
+
+            if (selectedState && indianStates[selectedState]) {
+                indianStates[selectedState].sort().forEach(city => { 
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                citySelect.disabled = false;
+            }
+        };
+
+        stateSelect.addEventListener('change', updateCities);
+        populateStates();
+        // --- End State/City Logic ---
+
+
+        // --- Initial Required Check on Load ---
+        document.querySelector('input[name="payment-method"][value="card"]').checked = true;
+        cardInputs.forEach(input => input.setAttribute('required', 'required'));
+        // ---------------------------------------
+
+        // --- Helper function to render the cart content on checkout (omitted for brevity) ---
+        const renderCheckoutSummary = (cartItems) => {
+            if (!cartItems || cartItems.length === 0) {
+                alert("Your cart is empty. Redirecting to shopping cart.");
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            summaryItemsContainer.innerHTML = '';
+            let subtotal = 0;
+
+            cartItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                summaryItemsContainer.innerHTML += `
+                    <div class="summary-item">
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>₹${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+
+            summaryTotalPrice.textContent = `₹${subtotal.toFixed(2)}`;
+        };
+        
+        // --- Function to fetch the cart data (omitted for brevity) ---
+        const fetchAndRenderCheckout = async () => {
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:5000/api/cart/user-cart', {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    if (response.status === 401 || response.status === 403) {
+                         localStorage.removeItem('venyora-token');
+                         alert('Session expired. Please log in again.');
+                         window.location.href = 'signup.html';
+                         return;
+                    }
+                    
+                    if (response.ok) {
+                        const cart = await response.json();
+                        renderCheckoutSummary(cart.items); 
+                    } else {
+                        renderCheckoutSummary([]);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user cart for checkout:', error);
+                    const guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+                    renderCheckoutSummary(guestCart); 
+                }
+            } else {
+                const guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+                renderCheckoutSummary(guestCart);
+            }
+        };
+
+        fetchAndRenderCheckout();
+
+        // Optional: Add logic to switch payment forms (e.g., hide card form for UPI/COD)
+        document.querySelectorAll('.payment-method input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('selected'));
+                this.closest('.payment-method').classList.add('selected');
+
+                const selectedValue = this.value;
+
+                // --- Toggling Visibility ---
+                cardPaymentForm.style.display = 'none';
+                upiNetbankingContainer.style.display = 'none';
+
+                // Reset required attributes on all payment forms
+                cardInputs.forEach(input => input.removeAttribute('required'));
+                netbankingSelect.removeAttribute('required');
+                
+                // Show/Hide based on selection
+                if (selectedValue === 'card') {
+                    cardPaymentForm.style.display = 'block';
+                    cardInputs.forEach(input => input.setAttribute('required', 'required'));
+                } else if (selectedValue === 'upi') {
+                    upiNetbankingContainer.style.display = 'block';
+                    // Make Netbanking select required for validation purposes
+                    netbankingSelect.setAttribute('required', 'required'); 
+                }
+                // COD requires no extra fields
+            });
+        });
+        
+        // Final action: Place Order button logic (Validation enforced here)
+        document.querySelector('.place-order-btn').addEventListener('click', (e) => {
+            e.preventDefault(); 
+            
+            const shippingForm = document.getElementById('checkout-form');
+            const selectedPayment = document.querySelector('input[name="payment-method"]:checked').value;
+            
+            // Step 1: Check if all Shipping Address fields are valid (including new Selects)
+            if (!shippingForm.checkValidity()) {
+                 alert('Please fill out all required shipping address fields before confirming.');
+                 shippingForm.reportValidity();
+                 return; 
+            }
+
+            // Step 2: Check Payment Details validity based on method selected
+            let paymentFormValid = true;
+
+            if (selectedPayment === 'card') {
+                if (!cardPaymentForm.checkValidity()) {
+                    paymentFormValid = false;
+                    cardPaymentForm.reportValidity();
+                }
+            } else if (selectedPayment === 'upi') {
+                // Check if a UPI app or Net Banking option has been selected
+                const selectedApp = document.querySelector('.upi-app-option.selected-app');
+                const netbankingValue = netbankingSelect.value;
+                
+                // Validation for UPI/Net Banking: User must select a bank OR a UPI app
+                if (!selectedApp && !netbankingValue) {
+                    paymentFormValid = false;
+                    alert('Please select a UPI App or a Bank for Net Banking.');
+                }
+                
+                // If Netbanking dropdown is visible, enforce selection
+                if (netbankingSelect.hasAttribute('required') && !netbankingSelect.checkValidity()) {
+                     paymentFormValid = false;
+                     netbankingSelect.reportValidity();
+                }
+
+            }
+
+            if (!paymentFormValid) {
+                 alert('Please fill out all required payment details.');
+                 return; 
+            }
+
+            // Step 3: If validation passes, proceed with the order confirmation prompt:
+            if (confirm(`Confirming order placement via ${selectedPayment.toUpperCase()}. Proceed?`)) {
+                
+                // Clear cart upon successful "order placement"
+                localStorage.removeItem('venyoraGuestCart');
+                
+                window.location.href = 'confirmation.html';
+            }
+        });
+    });
+  </script>
