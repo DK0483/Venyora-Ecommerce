@@ -8,7 +8,7 @@ const updateCartCount = async () => {
 
     let count = 0;
     if (token) {
-        // AUTHENTICATED USER: Fetch count from API 
+        // AUTHENTICATED USER: Fetch count from API (Using Live Render URL)
         try {
             const response = await fetch('https://venyora-api-service.onrender.com/api/cart/user-cart', {
                 method: 'GET',
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (token && authLinksContainer) {
         try {
-            // FIX: Corrected API URL for user status check
+            // FIX: Corrected API URL for user status check (Using Live Render URL)
             const response = await fetch('https://venyora-api-service.onrender.com/api/auth/user', {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     window.location.reload();
                 });
             } else {
+                // This block handles the 401 error: If token is invalid/expired, clear it.
                 localStorage.removeItem('venyora-token');
                 if (navCartItem) {
                     navCartItem.style.display = 'none';
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (productCatalogueContainer) {
         const fetchProducts = async () => {
             try {
+                // FIX: Corrected API URL for fetching product catalogue
                 const response = await fetch('https://venyora-api-service.onrender.com/api/products');
                 if (!response.ok) throw new Error('Network response was not ok');
                 
@@ -172,6 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (productId) {
             const fetchProduct = async () => {
                 try {
+                    // FIX: Corrected API URL for fetching single product
                     const response = await fetch(`https://venyora-api-service.onrender.com/api/products/${productId}`);
                     if (!response.ok) throw new Error('Product not found');
 
