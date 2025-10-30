@@ -352,7 +352,7 @@
         const fetchAndRenderCheckout = async () => {
             if (token) {
                 try {
-                    const response = await fetch('http://localhost:5000/api/cart/user-cart', {
+                    const response = await fetch('https://venyora-api-service.onrender.com/api/cart/user-cart', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });

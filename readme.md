@@ -57,7 +57,7 @@ To get a local copy up and running follow these simple steps.
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/your-username/venyora-ecommerce.git](https://github.com/your-username/venyora-ecommerce.git)
+    git clone [https://github.com/your-username/Venyora-Ecommerce.git](https://github.com/your-username/Venyora-Ecommerce.git)
     ```
 
 2.  **Navigate to the project directory:**
@@ -79,7 +79,7 @@ To get a local copy up and running follow these simple steps.
     ```
     PORT=5000
     MONGO_URI=your_mongodb_connection_string
-    JWT_SECRET=my_jwt_secret_key_12345
+    JWT_SECRET=process.env.JWT_SECRET
     ```
 
 5.  **Run the server:**

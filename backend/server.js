@@ -11,11 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://venyora_admin:RbvoS1raLfGPdZXI@cluster0.8nleauy.mongodb.net/venyoraDB?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected successfully!'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// ------------------- API ROUTES -------------------
 
 // Import all route files here
 const authRoutes = require('./routes/auth');
@@ -38,6 +37,8 @@ app.use('/api/messages', messageRoutes);
 // ----------------------------------------------------
 
 // Start the server
+// New code:
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}.`);
+    console.log(`Access API live via RENDER_EXTERNAL_URL environment variable.`);
 });

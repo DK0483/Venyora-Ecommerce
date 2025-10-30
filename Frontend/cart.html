@@ -159,7 +159,7 @@
             if (token) {
                 // Logic for AUTHENTICATED USER (Fetches from API)
                 try {
-                    const response = await fetch('http://localhost:5000/api/cart/user-cart', {
+                    const response = await fetch('https://venyora-api-service.onrender.com/api/cart/user-cart', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -209,7 +209,7 @@
                         fetchAndRenderCart();
                     } else {
                         // AUTHENTICATED USER REMOVAL (API Call)
-                        fetch(`http://localhost:5000/api/cart/item/${productIdToRemove}`, {
+                        fetch(`https://venyora-api-service.onrender.com/api/cart/item/${productIdToRemove}`, {
                             method: 'DELETE',
                             headers: { 'Authorization': `Bearer ${token}` }
                         })

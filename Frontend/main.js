@@ -10,7 +10,7 @@ const updateCartCount = async () => {
     if (token) {
         // AUTHENTICATED USER: Fetch count from API 
         try {
-            const response = await fetch('http://localhost:5000/api/cart/user-cart', {
+            const response = await fetch('https://venyora-api-service.onrender.com/api/cart/user-cart', {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (token && authLinksContainer) {
         try {
             // FIX: Corrected API URL for user status check
-            const response = await fetch('http://localhost:5000/api/auth/user', {
+            const response = await fetch('https://venyora-api-service.onrender.com/api/auth/user', {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (productCatalogueContainer) {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/products');
+                const response = await fetch('https://venyora-api-service.onrender.com/api/products');
                 if (!response.ok) throw new Error('Network response was not ok');
                 
                 const products = await response.json();
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (productId) {
             const fetchProduct = async () => {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+                    const response = await fetch(`https://venyora-api-service.onrender.com/api/products/${productId}`);
                     if (!response.ok) throw new Error('Product not found');
 
                     const product = await response.json();
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (token) {
             try {
                 // FIX: Corrected API URL for adding to cart
-                const response = await fetch('http://localhost:5000/api/cart', {
+                const response = await fetch('https://venyora-api-service.onrender.com/api/cart', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
