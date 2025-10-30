@@ -2,12 +2,10 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const authMiddleware = require('../middleware/authMiddleware'); // Import the new middleware
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// @route   POST /api/auth/register
-// @desc    Register a new user
 router.post('/register', async (req, res) => {
     try {
         // 1. Get user data from the request body
@@ -47,9 +45,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-
-// @route   POST /api/auth/login
-// @desc    Authenticate a user and return a token
+// Authenticate a user and return a token
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -94,14 +90,8 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
-// @route   GET /api/auth/user
-// @desc    Get logged-in user data
-// @access  Private
 router.get('/user', authMiddleware, async (req, res) => {
     try {
-        // The middleware has already verified the token and added the user ID to the request
-        // We find the user by that ID but exclude the password from the data we send back
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
     } catch (err) {
@@ -109,6 +99,4 @@ router.get('/user', authMiddleware, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
-
 module.exports = router;

@@ -2,7 +2,6 @@ const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const Cart = require('../models/cart');
 const Product = require('../models/product');
-// FIX 1: Import Mongoose to use its ObjectId type
 const mongoose = require('mongoose'); 
 
 const router = express.Router();
@@ -10,9 +9,6 @@ const router = express.Router();
 // Helper function to convert string userId from JWT to ObjectId
 const toObjectId = (id) => new mongoose.Types.ObjectId(id);
 
-// @route   POST /api/cart
-// @desc    Add an item to the cart or update its quantity
-// @access  Private
 router.post('/', authMiddleware, async (req, res) => {
     const { productId, quantity } = req.body;
     const userId = req.user.id;
@@ -49,7 +45,7 @@ router.post('/', authMiddleware, async (req, res) => {
         } else {
             // No cart for user, create new cart
             const newCart = await Cart.create({
-                user: userId, // Mongoose is robust enough to handle the string here on creation
+                user: userId,
                 items: [{ 
                     productId, 
                     name: product.name, 
@@ -66,12 +62,8 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 });
 
-// @route   GET /api/cart/user-cart
-// @desc    Get the cart details for the authenticated user
-// @access  Private
 router.get('/user-cart', authMiddleware, async (req, res) => {
     try {
-        // FIX 3: Explicit conversion for the GET route is mandatory for reliable data retrieval
         const cart = await Cart.findOne({ user: toObjectId(req.user.id) });
         
         if (!cart) {
@@ -85,9 +77,6 @@ router.get('/user-cart', authMiddleware, async (req, res) => {
     }
 });
 
-// @route   DELETE /api/cart/item/:productId
-// @desc    Remove an item from the cart
-// @access  Private
 router.delete('/item/:productId', authMiddleware, async (req, res) => {
     try {
         // FIX 4: Explicit conversion for the DELETE route

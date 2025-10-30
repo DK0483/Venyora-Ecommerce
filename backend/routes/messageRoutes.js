@@ -2,9 +2,6 @@ const express = require('express');
 const Message = require('../models/message');
 const router = express.Router();
 
-// @route   POST /api/messages
-// @desc    Save a new message from the contact form
-// @access  Public
 router.post('/', async (req, res) => {
     try {
         const { name, email, message } = req.body;
@@ -27,5 +24,4 @@ router.post('/', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
 module.exports = router;
