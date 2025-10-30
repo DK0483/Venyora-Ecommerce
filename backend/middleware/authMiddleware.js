@@ -15,12 +15,10 @@ module.exports = function(req, res, next) {
 
     // 4. Verify token
     try {
-        // Verify the token using the secret key (which is hardcoded to "my_jwt_secret_key_12345")
-        const decoded = jwt.verify(token, "my_jwt_secret_key_12345");
-        
-        // Add user payload (containing the user ID) to the request object
-        req.user = decoded.user; 
-        next(); // Authorization successful, proceed to the route handler
+        const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+        req.user = decoded.user;
+        next();
+
     } catch (err) {
         // If JWT verification fails (expired, modified, invalid secret)
         console.error('Token verification failed:', err.message);

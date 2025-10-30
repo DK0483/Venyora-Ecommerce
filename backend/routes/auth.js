@@ -80,8 +80,8 @@ router.post('/login', async (req, res) => {
 
         jwt.sign(
             payload,
-            "my_jwt_secret_key_12345", // This should be in your .env file
-            { expiresIn: 3600 }, // Token expires in 1 hour
+            process.env.JWT_SECRET,
+            { expiresIn: 3600 },
             (err, token) => {
                 if (err) throw err;
                 res.json({ token });
