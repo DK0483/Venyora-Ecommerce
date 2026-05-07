@@ -275,7 +275,7 @@ nodemon server.js
 - [ ] Email notifications (Nodemailer)
 - [ ] Coupon / discount codes
 - [x] Image upload (Cloudinary)
-- [ ] Order tracking timeline
+- [x] Order tracking timeline
 - [ ] PWA support
 
 ---
