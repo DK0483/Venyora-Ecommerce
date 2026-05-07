@@ -164,7 +164,7 @@ Venyora-Ecommerce/
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/venyora-Ecommerce.git
-cd venyora-ecommerce
+cd VENYORA-ECOMMERCE-MAIN
 ```
 
 **2. Install backend dependencies**
