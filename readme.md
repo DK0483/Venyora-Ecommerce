@@ -8,7 +8,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **Frontend:** [venyoraa.netlify.app]()  
+🔗 **Frontend:** []()  
 🔗 **Backend API:** _(Render deployment URL)_
 
 ---
