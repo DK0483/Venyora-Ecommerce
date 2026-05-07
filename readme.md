@@ -1,6 +1,6 @@
 # 🛍️ VENYORA — Fashion E-Commerce Platform
 
-> A full-stack fashion e-commerce web application built with Node.js, Express, MongoDB, and vanilla JavaScript.
+> A full-stack fashion e-commerce web application built with Node.js, Express and vanilla JavaScript.
 
 ![VENYORA Banner](./banner.png)
 
@@ -8,7 +8,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **Frontend:** [venyoraa.netlify.app](https://venyoraa.netlify.app)  
+🔗 **Frontend:** [venyoraa.netlify.app]()  
 🔗 **Backend API:** _(Render deployment URL)_
 
 ---
