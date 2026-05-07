@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout | VENYORA</title>
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+body { font-family: 'Poppins', sans-serif; background: #f7f7f7; margin: 0; }
+
+.checkout-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.checkout-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.05);
+}
+
+.checkout-box h3 { margin-bottom: 1.5rem; font-weight: 600; }
+
+.address-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  background: #fff;
+}
+.address-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+.address-card.selected { border: 2px solid #111; }
+
+.default-badge {
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-left: 10px;
+}
+
+.payment-methods { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+
+.payment-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.payment-card:hover { border-color: #111; }
+.payment-card input[type="radio"] { transform: scale(1.2); }
+
+/* Payment badge icons */
+.payment-card .pay-icons {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.pay-badge {
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #444;
+}
+.pay-badge.upi  { background: #e8f5e9; color: #2e7d32; }
+.pay-badge.card { background: #e3f2fd; color: #1565c0; }
+
+.order-item { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 14px; }
+
+.summary-total {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.place-order-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+.place-order-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.place-order-btn:hover:not(:disabled) { background: #333; }
+.place-order-btn.loading { opacity: 0.7; pointer-events: none; }
+
+/* Secure badge */
+.secure-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 0.8rem;
+  font-size: 12px;
+  color: #888;
+}
+
+@media(max-width: 900px) {
+  .checkout-container { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav__header">
+    <div class="nav__logo"><a href="index.html">VENYORA</a></div>
+  </div>
+</nav>
+
+<div class="checkout-container">
+
+  <!-- LEFT SIDE -->
+  <div class="checkout-box">
+    <h3>Shipping Address</h3>
+    <div id="saved-addresses"></div>
+    <button type="button"
+      onclick="window.location.href='profile.html#addresses?openModal=true'"
+      style="margin-bottom:1rem;padding:0.6rem 1rem;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;">
+      + Add New Address
+    </button>
+
+    <h3 style="margin-top:2rem;">Payment Method</h3>
+    <div class="payment-methods">
+
+      <label class="payment-card">
+        <input type="radio" name="payment" value="cod" checked>
+        <span><strong>Cash on Delivery</strong></span>
+        <div class="pay-icons"><span class="pay-badge">COD</span></div>
+      </label>
+
+      <label class="payment-card">
+        <input type="radio" name="payment" value="card">
+        <span><strong>Credit / Debit Card</strong></span>
+        <div class="pay-icons">
+          <span class="pay-badge card">VISA</span>
+          <span class="pay-badge card">MC</span>
+          <span class="pay-badge card">RuPay</span>
+        </div>
+      </label>
+
+      <label class="payment-card">
+        <input type="radio" name="payment" value="upi">
+        <span><strong>UPI</strong></span>
+        <div class="pay-icons">
+          <span class="pay-badge upi">GPay</span>
+          <span class="pay-badge upi">PhonePe</span>
+          <span class="pay-badge upi">Paytm</span>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="checkout-box">
+    <h3>Order Summary</h3>
+    <div id="order-items"></div>
+    <div class="order-item">
+      <span>Shipping</span><span>FREE</span>
+    </div>
+    <div class="summary-total">
+      <div class="order-item">
+        <span>Total</span>
+        <span id="order-total">₹0</span>
+      </div>
+    </div>
+
+    <button class="place-order-btn" id="place-order-btn" onclick="handlePlaceOrder()" disabled>
+      Place Order
+    </button>
+
+    <div class="secure-badge">
+      🔒 Secure Checkout &nbsp;|&nbsp; Powered by Razorpay
+    </div>
+  </div>
+
+</div>
+
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+const API      = "http://localhost:5000/api";
+const RZPKEY   = "rzp_test_SmQsvH4QbHQRW6"; // Your Razorpay Key ID
+const token    = localStorage.getItem("venyora-token");
+
+if (!token) window.location.href = "signup.html";
+
+const placeOrderBtn           = document.getElementById("place-order-btn");
+const orderItemsContainer     = document.getElementById("order-items");
+const orderTotalEl            = document.getElementById("order-total");
+const savedAddressesContainer = document.getElementById("saved-addresses");
+const paymentRadios           = document.querySelectorAll("input[name='payment']");
+
+let selectedAddressId = null;
+let cartTotal = 0;
+
+/* ================= VALIDATION ================= */
+function validateCheckout() {
+  const paymentSelected = Array.from(paymentRadios).some(r => r.checked);
+  placeOrderBtn.disabled = !(selectedAddressId && paymentSelected);
+}
+paymentRadios.forEach(r => r.addEventListener("change", validateCheckout));
+
+/* ================= LOAD ADDRESSES ================= */
+async function loadAddresses() {
+  const res       = await fetch(`${API}/address`, { headers: { Authorization: `Bearer ${token}` } });
+  const addresses = await res.json();
+
+  savedAddressesContainer.innerHTML = "";
+
+  if (!addresses.length) {
+    savedAddressesContainer.innerHTML = "<p style='margin-bottom:15px'>No saved addresses.</p>";
+    validateCheckout();
+    return;
+  }
+
+  addresses.forEach(addr => {
+    const card = document.createElement("div");
+    card.className = "address-card";
+
+    if (addr.isDefault) {
+      card.classList.add("selected");
+      selectedAddressId = addr._id;
+    }
+
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <strong>${addr.addressType === "Home" ? "🏠 Home" : "🏢 Office"}</strong>
+          <div style="font-weight:500;">${addr.fullName}</div>
+        </div>
+        ${addr.isDefault ? "<span class='default-badge'>Default</span>" : ""}
+      </div>
+      <p>${addr.houseNumber}, ${addr.area}</p>
+      <p>${addr.city}, ${addr.state} - ${addr.pincode}</p>
+      <p>${addr.mobile}</p>
+    `;
+
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".address-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedAddressId = addr._id;
+      validateCheckout();
+    });
+
+    savedAddressesContainer.appendChild(card);
+  });
+
+  if (!selectedAddressId && addresses.length > 0) {
+    selectedAddressId = addresses[0]._id;
+    document.querySelector(".address-card")?.classList.add("selected");
+  }
+
+  validateCheckout();
+}
+
+/* ================= LOAD CART ================= */
+async function loadCart() {
+  const res  = await fetch(`${API}/cart/user-cart`, { headers: { Authorization: `Bearer ${token}` } });
+  const data = await res.json();
+  const items = data.items || [];
+
+  cartTotal = 0;
+  orderItemsContainer.innerHTML = "";
+
+  items.forEach(item => {
+    const subtotal = item.price * item.quantity;
+    cartTotal += subtotal;
+    orderItemsContainer.innerHTML += `
+      <div class="order-item">
+        <span>${item.name} x ${item.quantity}</span>
+        <span>₹${subtotal.toFixed(2)}</span>
+      </div>
+    `;
+  });
+
+  orderTotalEl.textContent = `₹${cartTotal.toFixed(2)}`;
+}
+
+/* ================= GET SELECTED ADDRESS OBJECT ================= */
+async function getSelectedAddress() {
+  const res       = await fetch(`${API}/address`, { headers: { Authorization: `Bearer ${token}` } });
+  const addresses = await res.json();
+  return addresses.find(a => a._id === selectedAddressId);
+}
+
+/* ================= HANDLE PLACE ORDER ================= */
+async function handlePlaceOrder() {
+  if (!selectedAddressId) return;
+
+  const selectedPayment = document.querySelector("input[name='payment']:checked").value;
+  const selectedAddress = await getSelectedAddress();
+
+  if (!selectedAddress) { alert("Invalid address selected"); return; }
+
+  // COD — same as before, no Razorpay
+  if (selectedPayment === "cod") {
+    await placeCODOrder(selectedAddress);
+    return;
+  }
+
+  // Card or UPI — open Razorpay
+  await initiateRazorpayPayment(selectedAddress, selectedPayment);
+}
+
+/* ================= COD ORDER ================= */
+async function placeCODOrder(selectedAddress) {
+  placeOrderBtn.classList.add("loading");
+  placeOrderBtn.textContent = "Placing Order...";
+
+  const res   = await fetch(`${API}/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ shippingInfo: selectedAddress, paymentMethod: "cod" })
+  });
+
+  const order = await res.json();
+  if (!res.ok) { alert(order.message); placeOrderBtn.classList.remove("loading"); placeOrderBtn.textContent = "Place Order"; return; }
+
+  window.location.href = `confirmation.html?orderId=${order._id}`;
+}
+
+/* ================= RAZORPAY PAYMENT ================= */
+async function initiateRazorpayPayment(selectedAddress, paymentMethod) {
+  placeOrderBtn.classList.add("loading");
+  placeOrderBtn.textContent = "Opening Payment...";
+
+  try {
+    // Step 1: Create Razorpay order on backend
+    const res  = await fetch(`${API}/payment/create-order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ amount: cartTotal })
+    });
+
+    const data = await res.json();
+    if (!res.ok) { alert(data.message); return; }
+
+    // Step 2: Open Razorpay checkout popup
+    const options = {
+      key:         RZPKEY,
+      amount:      data.amount,           // in paise
+      currency:    "INR",
+      name:        "VENYORA",
+      description: "Fashion Store Payment",
+      order_id:    data.orderId,
+
+      // Pre-fill based on payment method
+      config: {
+        display: {
+          blocks: {
+            utib: { name: "Pay via UPI", instruments: [{ method: "upi" }] },
+            card: { name: "Pay via Card", instruments: [{ method: "card" }] }
+          },
+          sequence: paymentMethod === "upi" ? ["block.utib", "block.card"] : ["block.card", "block.utib"],
+          preferences: { show_default_blocks: true }
+        }
+      },
+
+      handler: async function (response) {
+        // Step 3: Verify payment on backend & place order
+        const verifyRes = await fetch(`${API}/payment/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            razorpay_order_id:   response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature:  response.razorpay_signature,
+            shippingInfo:        selectedAddress
+          })
+        });
+
+        const result = await verifyRes.json();
+        if (verifyRes.ok) {
+          window.location.href = `confirmation.html?orderId=${result.orderId}`;
+        } else {
+          alert("Payment verification failed: " + result.message);
+        }
+      },
+
+      modal: {
+        ondismiss: function () {
+          placeOrderBtn.classList.remove("loading");
+          placeOrderBtn.textContent = "Place Order";
+        }
+      },
+
+      theme: { color: "#111111" }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on("payment.failed", function (response) {
+      alert("Payment failed: " + response.error.description);
+      placeOrderBtn.classList.remove("loading");
+      placeOrderBtn.textContent = "Place Order";
+    });
+
+    rzp.open();
+
+  } catch (err) {
+    console.error("Payment error:", err);
+    alert("Something went wrong. Please try again.");
+    placeOrderBtn.classList.remove("loading");
+    placeOrderBtn.textContent = "Place Order";
+  }
+}
+
+loadCart();
+loadAddresses();
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel | VENYORA</title>
+  <link rel="stylesheet" href="admin.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="admin-container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>VENYORA</h2>
+    <ul>
+      <li onclick="loadDashboard()">📊 Dashboard</li>
+      <li onclick="loadProducts()">🛍 Products</li>
+      <li onclick="loadOrders()">📦 Orders</li>
+      <li onclick="loadUsers()">👥 Users</li>
+      <li onclick="toggleDarkMode()">🌙 Dark Mode</li>
+      <li onclick="logout()">🚪 Logout</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div id="content-area">
+
+      <!-- DASHBOARD -->
+      <section id="dashboard-section">
+        <h1>Dashboard</h1>
+
+        <div class="dashboard-grid">
+
+          <div class="stat-card revenue">
+            <h3 id="totalRevenue">₹0</h3>
+            <p>Total Revenue</p>
+          </div>
+
+          <div class="stat-card orders">
+            <h3 id="totalOrders">0</h3>
+            <p>Total Orders</p>
+          </div>
+
+          <div class="stat-card users">
+            <h3 id="totalUsers">0</h3>
+            <p>Total Users</p>
+          </div>
+
+          <div class="stat-card pending">
+            <h3 id="pendingOrders">0</h3>
+            <p>Pending Orders</p>
+          </div>
+
+          <div class="stat-card lowstock">
+            <h3 id="lowStock">0</h3>
+            <p>Low Stock Products</p>
+          </div>
+
+        </div>
+
+        <!-- Analytics Chart -->
+        <div class="card">
+          <h3>Revenue Overview</h3>
+          <canvas id="revenueChart"></canvas>
+        </div>
+
+      </section>
+
+      <!-- PRODUCTS -->
+      <section id="products-section" style="display:none;">
+        <h1>Products</h1>
+
+        <!-- ADD PRODUCT BUTTON -->
+        <button onclick="openAddModal()" 
+                style="margin-bottom:20px;padding:8px 14px;border:none;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer;">
+          + Add New Product
+        </button>
+
+        <div id="products-container"></div>
+      </section>
+
+      <!-- ORDERS -->
+      <section id="orders-section" style="display:none;">
+        <h1>Orders</h1>
+        <div id="orders-container"></div>
+      </section>
+
+      <!-- USERS -->
+      <section id="users-section" style="display:none;">
+        <h1>Users</h1>
+        <div id="users-container"></div>
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- PRODUCT EDIT MODAL -->
+<div id="editModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Edit Product</h3>
+
+    <input type="text" id="edit-name" placeholder="Product Name">
+    <input type="number" id="edit-price" placeholder="Price">
+    <input type="number" id="edit-stock" placeholder="Stock">
+
+    <input type="text" id="edit-imageUrl" placeholder="Cloudinary Image URL">
+    <textarea id="edit-description" placeholder="Product Description"
+
+              style="margin-top:10px;width:100%;padding:8px;border-radius:6px;"></textarea>
+
+    <div style="margin-top:15px;">
+      <button onclick="updateProduct()">Save Changes</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div id="addModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Add New Product</h3>
+
+    <input type="text" id="addName" placeholder="Product Name">
+    <input type="number" id="addPrice" placeholder="Price">
+    <input type="number" id="addStock" placeholder="Quantity">
+    <input type="text" id="addImageUrl" placeholder="Cloudinary Image URL">
+    <textarea id="addDescription" placeholder="Product Description"></textarea>
+
+    <div style="margin-top:15px; display:flex; gap:10px;">
+      <button onclick="addProduct()">Add Product</button>
+      <button onclick="closeAddModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Catalogue | VENYORA</title>
+
+    <!-- ✅ FIX: ensure products display as grid -->
+<style>
+  .catalogue__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 4rem;
+      margin-top: 2rem;
+  }
+
+  .product-card {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      background: #fff;
+      overflow: visible;              /* ✅ important */
+      display: flex;                 /* ✅ important */
+      flex-direction: column;        /* ✅ important */
+      transition: transform 0.2s ease;
+  }
+
+  .product-card:hover {
+      transform: translateY(-4px);
+  }
+
+  .product-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+  }
+
+  /* 🔥 THIS FIXES THE GAP */
+  .product-card-content {
+      padding: 0.8rem 0.8rem 0.6rem;
+      text-align: center;
+  }
+
+  .product-card-content h4 {
+      font-size: 1rem;
+      margin: 0.4rem 0 0.2rem;
+      line-height: 1.3;
+  }
+
+  .product-card-content p {
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.95rem;
+  }
+
+  .product-card-content .btn {
+      margin-top: 0.6rem;   /* ✅ button pushed just enough */
+      padding: 0.6rem;
+      width: 100%;
+      font-size: 0.9rem;
+  }
+</style>
+</head>
+<body class="catalogue-page">
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <a href="index.html">VENYORA</a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
+        </div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="catalogue.html" class="active">CATALOGUE</a></li>
+        <li><a href="index.html#fashion">FASHION</a></li>
+        <li><a href="index.html#favourite">FAVOURITE</a></li>
+        <li><a href="index.html#lifestyle">LIFESTYLE</a></li>
+        <li id="user-auth-links">
+          <a href="signup.html" class="btn">SIGN UP</a>
+        </li>
+        <li id="nav-cart-item" style="display: none;">
+            <a href="cart.html" class="nav__cart">
+              <i class="ri-shopping-cart-2-line"></i>
+              <span id="cart-count">0</span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+
+    <header class="section__container catalogue-header">
+        <h1 class="section__header">Our Collection</h1>
+    </header>
+
+    <!-- ✅ THIS IS WHERE PRODUCTS RENDER -->
+    <section class="section__container">
+        <div class="catalogue__grid" id="product-catalogue"></div>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Contact Us | VENYORA</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #fafaf8;
+            color: #111;
+        }
+
+        /* ── Contact Hero ── */
+        .contact-hero {
+            background: #111;
+            color: #fff;
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                rgba(255,255,255,0.02) 40px,
+                rgba(255,255,255,0.02) 80px
+            );
+        }
+        .contact-hero__tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+        .contact-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            position: relative;
+        }
+        .contact-hero h1 em {
+            font-style: italic;
+            color: #d4a853;
+        }
+        .contact-hero p {
+            margin-top: 1rem;
+            color: #888;
+            font-size: 1rem;
+            font-weight: 300;
+            position: relative;
+        }
+
+        /* ── Layout ── */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 0;
+            max-width: 1100px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        /* ── Info Panel ── */
+        .contact-info {
+            padding: 3rem 3rem 3rem 0;
+            border-right: 1px solid #e8e8e4;
+        }
+        .contact-info h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+        .contact-info > p {
+            color: #666;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+        .info-item__icon {
+            width: 42px;
+            height: 42px;
+            background: #111;
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .info-item__text h4 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+            margin-bottom: 0.2rem;
+        }
+        .info-item__text p {
+            font-size: 0.95rem;
+            color: #222;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 2.5rem;
+        }
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .social-links a:hover {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        /* ── Form Panel ── */
+        .contact-form-panel {
+            padding: 3rem 0 3rem 3rem;
+        }
+        .contact-form-panel h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 0.4rem;
+        }
+        .contact-form-panel > p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.85rem 1rem;
+            border: 1px solid #e0e0db;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            background: #fff;
+            color: #111;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            resize: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #111;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+        }
+        .form-group textarea { height: 130px; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
+        }
+        .submit-btn:hover { background: #333; }
+        .submit-btn:active { transform: scale(0.99); }
+        .submit-btn.loading { opacity: 0.7; pointer-events: none; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 999;
+            max-width: 340px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: #111; color: #fff; }
+        .toast.error   { background: #c0392b; color: #fff; }
+
+        /* ── Divider ── */
+        .contact-divider {
+            max-width: 1100px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+            border-top: 1px solid #e8e8e4;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .contact-info {
+                padding: 2rem 0;
+                border-right: none;
+                border-bottom: 1px solid #e8e8e4;
+            }
+            .contact-form-panel {
+                padding: 2rem 0;
+            }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo"><a href="index.html">VENYORA</a></div>
+        <div class="nav__menu__btn" id="menu-btn"><i class="ri-menu-line"></i></div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="catalogue.html">CATALOGUE</a></li>
+        <li><a href="contact.html" class="active">CONTACT</a></li>
+        <li id="user-auth-links"><a href="signup.html" class="btn">SIGN UP</a></li>
+        <li id="nav-cart-item" style="display: none;">
+          <a href="cart.html" class="nav__cart">
+            <i class="ri-shopping-cart-2-line"></i>
+            <span id="cart-count">0</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <div class="contact-hero">
+        <span class="contact-hero__tag">Customer Support</span>
+        <h1>Get In <em>Touch</em></h1>
+        <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="contact-layout">
+
+        <!-- Left: Info -->
+        <div class="contact-info">
+            <h2>Contact Info</h2>
+            <p>Reach out through any of these channels or fill in the form.</p>
+
+            <div class="info-item">
+                <div class="info-item__icon"><i class="ri-map-pin-2-line"></i></div>
+                <div class="info-item__text">
+                    <h4>Address</h4>
+                    <p>India</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item__icon"><i class="ri-mail-line"></i></div>
+                <div class="info-item__text">
+                    <h4>Email</h4>
+                    <p>support@venyora.com</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item__icon"><i class="ri-time-line"></i></div>
+                <div class="info-item__text">
+                    <h4>Working Hours</h4>
+                    <p>Mon – Sat, 10am – 9pm IST</p>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="#"><i class="ri-instagram-line"></i></a>
+                <a href="#"><i class="ri-twitter-x-line"></i></a>
+                <a href="#"><i class="ri-facebook-line"></i></a>
+                <a href="#"><i class="ri-youtube-line"></i></a>
+            </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="contact-form-panel">
+            <h2>Send a Message</h2>
+            <p>We typically reply within 24 hours.</p>
+
+            <form id="contact-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contact-name">Your Name</label>
+                        <input type="text" id="contact-name" placeholder="Your Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Email Address</label>
+                        <input type="email" id="contact-email" placeholder="you@email.com" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-subject">Subject</label>
+                    <select id="contact-subject">
+                        <option value="Order Issue">Order Issue</option>
+                        <option value="Product Inquiry">Product Inquiry</option>
+                        <option value="Return & Refund">Return &amp; Refund</option>
+                        <option value="General Question">General Question</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <i class="ri-send-plane-line"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="contact-divider"></div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="main.js"></script>
+    <script>
+        const showToast = (msg, type = 'success') => {
+            const toast = document.getElementById('toast');
+            toast.className = `toast ${type} show`;
+            toast.innerHTML = `<i class="ri-${type === 'success' ? 'checkbox-circle' : 'error-warning'}-line"></i> ${msg}`;
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        };
+
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const name    = document.getElementById('contact-name').value;
+            const email   = document.getElementById('contact-email').value;
+            const subject = document.getElementById('contact-subject').value;
+            const message = document.getElementById('contact-message').value;
+
+            btn.classList.add('loading');
+            btn.innerHTML = '<i class="ri-loader-4-line"></i> Sending...';
+
+            try {
+                const response = await fetch('http://localhost:5000/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, subject, message })
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast('Message sent! We\'ll get back to you soon.', 'success');
+                    document.getElementById('contact-form').reset();
+                } else {
+                    showToast(result.msg || 'Something went wrong.', 'error');
+                }
+            } catch (err) {
+                showToast('Could not connect to server. Please try again.', 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.innerHTML = '<i class="ri-send-plane-line"></i> Send Message';
+            }
+        });
+    </script>
+</body>
+</html>

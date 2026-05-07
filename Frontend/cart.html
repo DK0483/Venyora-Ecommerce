@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart | VENYORA</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .cart-page-content {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .cart-header,
+    .cart-item {
+      display: grid;
+      grid-template-columns: 120px 1.5fr 120px 120px 40px;
+      align-items: center;
+    }
+
+    .cart-header {
+      padding-bottom: 1rem;
+      font-weight: 600;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .cart-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item img {
+      width: 90px;
+      border-radius: 8px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .remove-btn:hover {
+      color: #e53935;
+    }
+
+    .cart-summary {
+      background: #f7f7f7;
+      padding: 2rem;
+      border-radius: 12px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .summary-item,
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .summary-total {
+      font-size: 18px;
+      font-weight: 700;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+
+    .place-order-btn {
+      width: 100%;
+      padding: 14px;
+      background: #111;
+      color: #fff;
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .cart-page-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav__header">
+    <div class="nav__logo"><a href="index.html">VENYORA</a></div>
+  </div>
+</nav>
+
+<main class="section__container">
+  <h2 class="section__header">Your Shopping Cart</h2>
+
+  <div id="cart-page-wrapper" class="cart-page-content">
+    <div>
+      <div class="cart-header">
+        <div>ITEM</div>
+        <div>DETAILS</div>
+        <div>QTY</div>
+        <div>TOTAL</div>
+        <div></div>
+      </div>
+      <div id="cart-container"></div>
+    </div>
+
+    <div id="cart-summary-section" class="cart-summary" style="display:none;">
+      <h3>Order Summary</h3>
+
+      <div class="summary-item">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">₹0</span>
+      </div>
+
+      <div class="summary-item">
+        <span>Shipping</span>
+        <span>FREE</span>
+      </div>
+
+      <div class="summary-total">
+        <span>Total</span>
+        <span id="cart-total">₹0</span>
+      </div>
+
+      <a href="checkout.html" class="place-order-btn">Proceed to Checkout</a>
+    </div>
+  </div>
+
+  <div id="cart-empty-message" style="display:none; text-align:center; margin-top:4rem;">
+    <p>Your cart is empty.</p>
+    <a href="catalogue.html" class="btn">Continue Shopping</a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer__bar">© 2025 VENYORA</div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("venyora-token");
+  const cartContainer = document.getElementById("cart-container");
+  const emptyMsg = document.getElementById("cart-empty-message");
+  const summaryBox = document.getElementById("cart-summary-section");
+
+  const loadCart = async () => {
+    if (!token) {
+      const guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+      renderCart(guestCart);
+      return;
+    }
+
+    const res = await fetch("http://localhost:5000/api/cart/user-cart", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    renderCart(data.items || []);
+  };
+
+  const renderCart = items => {
+    cartContainer.innerHTML = "";
+
+    if (!items.length) {
+      emptyMsg.style.display = "block";
+      summaryBox.style.display = "none";
+      return;
+    }
+
+    emptyMsg.style.display = "none";
+    summaryBox.style.display = "block";
+
+    let subtotal = 0;
+
+    items.forEach(item => {
+      const product = item.product || item;
+      const qty = item.quantity;
+      const total = product.price * qty;
+      subtotal += total;
+
+      cartContainer.innerHTML += `
+        <div class="cart-item">
+          <img src="${product.imageUrl}" />
+
+          <div>
+            <strong>${product.name}</strong><br/>
+            <small>Size: ${item.size}</small>
+          </div>
+
+          <div class="qty-controls">
+            <button class="qty-btn decrease"
+              data-id="${product._id}"
+              data-size="${item.size}"
+            >−</button>
+
+            <span>${qty}</span>
+
+            <button class="qty-btn increase"
+              data-id="${product._id}"
+              data-size="${item.size}"
+            >+</button>
+          </div>
+
+          <div>₹${total.toFixed(2)}</div>
+
+          <button class="remove-btn"
+            data-id="${product._id}"
+            data-size="${item.size}"
+          >
+            <i class="ri-delete-bin-line"></i>
+          </button>
+        </div>
+      `;
+    });
+
+    document.getElementById("cart-subtotal").textContent = `₹${subtotal.toFixed(2)}`;
+    document.getElementById("cart-total").textContent = `₹${subtotal.toFixed(2)}`;
+  };
+
+  document.body.addEventListener("click", async e => {
+    const inc = e.target.closest(".increase");
+    const dec = e.target.closest(".decrease");
+    const del = e.target.closest(".remove-btn");
+    if (!inc && !dec && !del) return;
+
+    const target = inc || dec || del;
+    const productId = target.dataset.id;
+    const size = target.dataset.size;
+
+    if (!token) {
+      let cart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+      const item = cart.find(i => i.id === productId && i.size === size);
+      if (!item) return;
+
+      if (inc) item.quantity++;
+      if (dec) item.quantity--;
+      if (item.quantity <= 0 || del) {
+        cart = cart.filter(i => !(i.id === productId && i.size === size));
+      }
+
+      localStorage.setItem("venyoraGuestCart", JSON.stringify(cart));
+      renderCart(cart);
+      return;
+    }
+
+    if (del) {
+      await fetch("http://localhost:5000/api/cart/item", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId, size })
+      });
+    } else {
+      const currentQty = Number(target.parentElement.querySelector("span").textContent);
+      const newQty = inc ? currentQty + 1 : currentQty - 1;
+
+      await fetch("http://localhost:5000/api/cart/item", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId, size, quantity: newQty })
+      });
+    }
+
+    loadCart();
+  });
+
+  loadCart();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Confirmed | VENYORA</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Poppins, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+    }
+
+    .confirmation-container {
+      max-width: 800px;
+      margin: 4rem auto;
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 14px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.05);
+    }
+
+    .order-box {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .Pending { background: #fff3cd; color: #856404; }
+    .Confirmed { background: #cce5ff; color: #004085; }
+    .Shipped { background: #e2d9f3; color: #4b0082; }
+    .Delivered { background: #d4edda; color: #155724; }
+
+    .continue-btn {
+      margin-top: 25px;
+      padding: 12px 22px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    .continue-btn:hover {
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="confirmation-container">
+
+  <h2>🎉 Order Confirmed!</h2>
+  <p>Thank you for shopping with VENYORA.</p>
+
+  <div id="order-details">
+    <p>Loading order details...</p>
+  </div>
+
+  <button onclick="window.location.href='index.html'" class="continue-btn">
+    Continue Shopping
+  </button>
+
+</div>
+
+<script>
+
+const token = localStorage.getItem("venyora-token");
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get("orderId");
+
+const orderDetailsDiv = document.getElementById("order-details");
+
+if (!orderId) {
+  orderDetailsDiv.innerHTML = "<p>Order not found.</p>";
+} else {
+
+  fetch(`http://localhost:5000/api/orders/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => res.json())
+  .then(order => {
+
+    orderDetailsDiv.innerHTML = `
+      <div class="order-box">
+        <p><strong>Order ID:</strong> ${order._id}</p>
+        <p><strong>Total:</strong> ₹${order.totalAmount}</p>
+        <p><strong>Status:</strong></p>
+        <span class="status-badge ${order.status}">
+          ${order.status}
+        </span>
+      </div>
+    `;
+
+  })
+  .catch(() => {
+    orderDetailsDiv.innerHTML = "<p>Failed to load order details.</p>";
+  });
+
+}
+
+</script>
+
+</body>
+</html>
