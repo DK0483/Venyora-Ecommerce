@@ -274,7 +274,7 @@ nodemon server.js
 - [x] Stock management
 - [ ] Email notifications (Nodemailer)
 - [ ] Coupon / discount codes
-- [ ] Image upload (Cloudinary)
+- [x] Image upload (Cloudinary)
 - [ ] Order tracking timeline
 - [ ] PWA support
 
