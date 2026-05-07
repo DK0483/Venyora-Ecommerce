@@ -163,7 +163,7 @@ Venyora-Ecommerce/
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/venyora-ecommerce.git
+git clone https://github.com/YOUR_USERNAME/venyora-Ecommerce.git
 cd venyora-ecommerce
 ```
 
