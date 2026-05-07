@@ -2,7 +2,7 @@
 
 > A full-stack fashion e-commerce web application built with Node.js, Express, MongoDB, and vanilla JavaScript.
 
-![VENYORA Banner](https://via.placeholder.com/1200x400/111111/ffffff?text=VENYORA+%E2%80%94+Fashion+E-Commerce)
+![VENYORA Banner](./banner.png)
 
 ---
 
