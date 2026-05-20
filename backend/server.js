@@ -25,7 +25,7 @@ if (!process.env.MONGO_URI) {
 app.use(cors({
     origin: '*',
     credentials: true
-})),
+}));
 
 /* ======================================================
    STEP 5 FIX #3: Body parser BEFORE routes
