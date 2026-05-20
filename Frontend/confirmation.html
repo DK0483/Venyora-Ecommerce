@@ -88,7 +88,7 @@ if (!orderId) {
   orderDetailsDiv.innerHTML = "<p>Order not found.</p>";
 } else {
 
-  fetch(`http://localhost:5000/api/orders/${orderId}`, {
+  fetch(`https://venyora-ecommerce.onrender.com/api/orders/${orderId}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }

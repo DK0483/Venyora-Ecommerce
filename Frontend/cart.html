@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    const res = await fetch("http://localhost:5000/api/cart/user-cart", {
+    const res = await fetch("https://venyora-ecommerce.onrender.com/api/cart/user-cart", {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (del) {
-      await fetch("http://localhost:5000/api/cart/item", {
+      await fetch("https://venyora-ecommerce.onrender.com/api/cart/item", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const currentQty = Number(target.parentElement.querySelector("span").textContent);
       const newQty = inc ? currentQty + 1 : currentQty - 1;
 
-      await fetch("http://localhost:5000/api/cart/item", {
+      await fetch("https://venyora-ecommerce.onrender.com/api/cart/item", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

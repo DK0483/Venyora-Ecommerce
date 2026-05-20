@@ -14,7 +14,7 @@ const updateCartCount = async () => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/cart/user-cart",
+      "https://venyora-ecommerce.onrender.com/api/cart/user-cart",
       {
         headers: { Authorization: `Bearer ${token}` }
       }
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (token) {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/user",
+        "https://venyora-ecommerce.onrender.com/api/auth/user",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (productCatalogueContainer) {
     try {
-      const response = await fetch("http://localhost:5000/api/products");
+      const response = await fetch("https://venyora-ecommerce.onrender.com/api/products");
       const products = await response.json();
 
       productCatalogueContainer.innerHTML = "";
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/products/${productId}`
+        `https://venyora-ecommerce.onrender.com/api/products/${productId}`
       );
       const product = await res.json();
 
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    await fetch("http://localhost:5000/api/cart", {
+    await fetch("https://venyora-ecommerce.onrender.com/api/cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

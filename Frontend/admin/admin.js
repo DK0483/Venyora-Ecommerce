@@ -22,7 +22,7 @@ if (!token) {
 async function loadDashboard() {
   setActiveMenu("Dashboard");
 
-  const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+  const res = await fetch("https://venyora-ecommerce.onrender.com/api/admin/dashboard", {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -64,7 +64,7 @@ async function loadDashboard() {
 async function loadProducts() {
   setActiveMenu("Products");
 
-  const res = await fetch("http://localhost:5000/api/admin/products", {
+  const res = await fetch("https://venyora-ecommerce.onrender.com/api/admin/products", {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -125,7 +125,7 @@ function filterProducts(value) {
 async function deleteProduct(id) {
   if (!confirm("Delete this product?")) return;
 
-  await fetch(`http://localhost:5000/api/admin/products/${id}`, {
+  await fetch(`https://venyora-ecommerce.onrender.com/api/admin/products/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -170,7 +170,7 @@ async function updateProduct() {
   const description = document.getElementById("edit-description").value;
   const category = document.getElementById("edit-category")?.value;
 
-  await fetch(`http://localhost:5000/api/admin/products/${editingProductId}`, {
+  await fetch(`https://venyora-ecommerce.onrender.com/api/admin/products/${editingProductId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -194,7 +194,7 @@ async function updateProduct() {
 async function loadOrders() {
   setActiveMenu("Orders");
 
-  const res = await fetch("http://localhost:5000/api/admin/orders", {
+  const res = await fetch("https://venyora-ecommerce.onrender.com/api/admin/orders", {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -234,7 +234,7 @@ async function loadOrders() {
 
 /* ================= UPDATE ORDER STATUS ================= */
 async function updateStatus(id, status) {
-  await fetch(`http://localhost:5000/api/admin/orders/status/${id}`, {
+  await fetch(`https://venyora-ecommerce.onrender.com/api/admin/orders/status/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -250,7 +250,7 @@ async function updateStatus(id, status) {
 async function loadUsers() {
   setActiveMenu("Users");
 
-  const res = await fetch("http://localhost:5000/api/admin/users", {
+  const res = await fetch("https://venyora-ecommerce.onrender.com/api/admin/users", {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -296,7 +296,7 @@ function logout() {
 async function addProduct() {
   const token = localStorage.getItem("venyora-token");
 
-  await fetch("http://localhost:5000/api/admin/products", {
+  await fetch("https://venyora-ecommerce.onrender.com/api/admin/products", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
