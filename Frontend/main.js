@@ -6,8 +6,7 @@ const updateCartCount = async () => {
   const token = localStorage.getItem("venyora-token");
 
   if (!token) {
-    const guestCart =
-      JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
+    const guestCart = JSON.parse(localStorage.getItem("venyoraGuestCart")) || [];
     cartCountSpan.textContent = guestCart.length;
     return;
   }
@@ -15,9 +14,7 @@ const updateCartCount = async () => {
   try {
     const response = await fetch(
       "https://venyora-ecommerce.onrender.com/api/cart/user-cart",
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     if (response.status === 401 || response.status === 403) {
@@ -109,8 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ================= PRODUCT CATALOGUE =================
-  const productCatalogueContainer =
-    document.getElementById("product-catalogue");
+  const productCatalogueContainer = document.getElementById("product-catalogue");
 
   if (productCatalogueContainer) {
     try {
@@ -126,9 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="product-card-content">
               <h4>${product.name}</h4>
               <p class="product-price">₹${product.price}</p>
-              <a href="product-cora.html?id=${product._id}" class="btn">
-                View
-              </a>
+              <a href="product-cora.html?id=${product._id}" class="btn">View</a>
             </div>
           </div>
         `;
@@ -141,14 +135,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ================= PRODUCT DETAIL PAGE =================
   const productImage = document.getElementById("product-image");
-  const productName = document.getElementById("product-name");
+  const productName  = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
-  const productDesc = document.getElementById("product-description");
-  const addToBagBtn = document.getElementById("add-to-bag");
+  const productDesc  = document.getElementById("product-description");
+  const addToBagBtn  = document.getElementById("add-to-bag");
 
   if (productImage && productName) {
-    const productId =
-      new URLSearchParams(window.location.search).get("id");
+    const productId = new URLSearchParams(window.location.search).get("id");
 
     if (!productId) {
       productName.textContent = "Product not found";
@@ -161,10 +154,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       const product = await res.json();
 
-      productImage.src = product.imageUrl;
-      productName.textContent = product.name;
+      productImage.src         = product.imageUrl;
+      productName.textContent  = product.name;
       productPrice.textContent = `₹${product.price}`;
-      productDesc.textContent = product.description;
+      productDesc.textContent  = product.description;
       addToBagBtn.dataset.productId = product._id;
 
       addToBagBtn.disabled = true;
@@ -173,10 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (box.classList.contains("disabled")) return;
 
         box.onclick = () => {
-          document
-            .querySelectorAll(".size-box")
-            .forEach(b => b.classList.remove("active"));
-
+          document.querySelectorAll(".size-box").forEach(b => b.classList.remove("active"));
           box.classList.add("active");
           selectedSize = box.textContent;
           addToBagBtn.disabled = false;
@@ -208,11 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        productId,
-        quantity: 1,
-        size: selectedSize
-      })
+      body: JSON.stringify({ productId, quantity: 1, size: selectedSize })
     });
 
     updateCartCount();
@@ -221,42 +207,87 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.body.addEventListener("click", e => {
     const addBtn = e.target.closest(".add-to-bag-btn");
-    if (addBtn) {
-      addItemToCart(addBtn.dataset.productId);
-    }
+    if (addBtn) addItemToCart(addBtn.dataset.productId);
 
     const wishlistBtn = e.target.closest(".wishlist-btn");
-    if (wishlistBtn) {
-      wishlistBtn.classList.toggle("active");
-    }
+    if (wishlistBtn) wishlistBtn.classList.toggle("active");
   });
 
   // ================= SIZE GUIDE =================
-const sizeGuideOverlay = document.getElementById("size-guide-overlay");
-const openSizeGuide = document.getElementById("open-size-guide");
-const closeSizeGuide = document.getElementById("close-size-guide");
+  const sizeGuideOverlay = document.getElementById("size-guide-overlay");
+  const openSizeGuide    = document.getElementById("open-size-guide");
+  const closeSizeGuide   = document.getElementById("close-size-guide");
 
-if (openSizeGuide && sizeGuideOverlay) {
-  openSizeGuide.addEventListener("click", () => {
-    sizeGuideOverlay.style.display = "flex";
-    document.body.style.overflow = "hidden";
-  });
-}
+  if (openSizeGuide && sizeGuideOverlay) {
+    openSizeGuide.addEventListener("click", () => {
+      sizeGuideOverlay.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+  }
 
-if (closeSizeGuide && sizeGuideOverlay) {
-  closeSizeGuide.addEventListener("click", () => {
-    sizeGuideOverlay.style.display = "none";
-    document.body.style.overflow = "auto";
-  });
-}
-
-// Close when clicking outside modal
-if (sizeGuideOverlay) {
-  sizeGuideOverlay.addEventListener("click", (e) => {
-    if (e.target === sizeGuideOverlay) {
+  if (closeSizeGuide && sizeGuideOverlay) {
+    closeSizeGuide.addEventListener("click", () => {
       sizeGuideOverlay.style.display = "none";
       document.body.style.overflow = "auto";
-    }
+    });
+  }
+
+  if (sizeGuideOverlay) {
+    sizeGuideOverlay.addEventListener("click", (e) => {
+      if (e.target === sizeGuideOverlay) {
+        sizeGuideOverlay.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+    });
+  }
+
+  // ================= MOBILE MENU TOGGLE =================
+  const menuBtn   = document.getElementById("menu-btn");
+  const navLinksEl = document.getElementById("nav-links");
+
+  if (menuBtn && navLinksEl) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      navLinksEl.classList.toggle("open");
+      const icon = menuBtn.querySelector("i");
+      if (icon) {
+        icon.classList.toggle("ri-menu-line");
+        icon.classList.toggle("ri-close-line");
+      }
+    });
+
+    navLinksEl.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinksEl.classList.remove("open");
+        const icon = menuBtn.querySelector("i");
+        if (icon) {
+          icon.classList.add("ri-menu-line");
+          icon.classList.remove("ri-close-line");
+        }
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!navLinksEl.contains(e.target) && !menuBtn.contains(e.target)) {
+        navLinksEl.classList.remove("open");
+        const icon = menuBtn.querySelector("i");
+        if (icon) {
+          icon.classList.add("ri-menu-line");
+          icon.classList.remove("ri-close-line");
+        }
+      }
+    });
+  }
+
+  // ================= SMOOTH SCROLL =================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   });
-}
+
 });
