@@ -206,17 +206,20 @@ body{
 /* Full screen fashion image */
 
 .left{
-    position:fixed;
-    inset:0;
+    position:absolute;
+    top:0;
+    left:0;
     width:100%;
-    height:100vh;
+    height:100;
     display:block;
+    z-index:1;
 }
 
 .left img{
     width:100%;
     height:100%;
     object-fit:cover;
+    object-position:center top;
 }
 
 /* Dark luxury overlay */
