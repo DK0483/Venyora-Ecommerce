@@ -8,8 +8,8 @@
 
 ## 🌐 Live Demo
 
-🔗 **Frontend:** []()  
-🔗 **Backend API:** _(Render deployment URL)_
+🔗 **Frontend:** [VENYORA Website](https://venyora-ecommerce.vercel.app/)  
+🔗 **Backend API:** [Render API](https://venyora-ecommerce.onrender.com)
 
 ---
 
@@ -43,11 +43,6 @@
 - Secure payment signature verification
 - Auto order confirmation after successful payment
 
-### ❤️ Wishlist
-
-- Add/remove products from wishlist
-- Persistent wishlist saved to database per user
-
 ### ⭐ Reviews & Ratings
 
 - Submit star ratings and written reviews
@@ -61,6 +56,7 @@
 - View and update order statuses
 - Manage users
 - Dashboard with key metrics
+- Track revenue and order statistics
 
 ### 📬 Contact
 
@@ -100,7 +96,7 @@
 ## 📁 Project Structure
 
 ```
-Venyora-Ecommerce/
+Venyora-Ecommerce-main/
 ├── backend/
 │   ├── middleware/
 │   │   ├── authMiddleware.js      # JWT verification
@@ -110,7 +106,6 @@ Venyora-Ecommerce/
 │   │   ├── product.js             # Product schema
 │   │   ├── cart.js                # Cart schema
 │   │   ├── order.js               # Order schema
-│   │   ├── wishlist.js            # Wishlist schema
 │   │   ├── review.js              # Review schema
 │   │   ├── address.js             # Address schema
 │   │   └── message.js             # Contact message schema
@@ -120,7 +115,6 @@ Venyora-Ecommerce/
 │   │   ├── cartRoutes.js          # Cart management
 │   │   ├── orderRoutes.js         # Orders (COD)
 │   │   ├── paymentRoutes.js       # Razorpay integration
-│   │   ├── wishlistRoutes.js      # Wishlist toggle
 │   │   ├── reviewRoutes.js        # Product reviews
 │   │   ├── addressRoutes.js       # Saved addresses
 │   │   ├── messageRoutes.js       # Contact form
@@ -134,18 +128,22 @@ Venyora-Ecommerce/
 │   └── server.js                  # Entry point
 │
 └── Frontend/
-    ├── admin/                     # Admin panel pages
-    ├── index.html                 # Home page
-    ├── catalogue.html             # Product listing
-    ├── product-cora.html          # Product detail
-    ├── cart.html                  # Shopping cart
-    ├── checkout.html              # Checkout + payment
-    ├── confirmation.html          # Order confirmation
-    ├── profile.html               # User profile
-    ├── signup.html                # Auth page
-    ├── contact.html               # Contact form
-    ├── main.js                    # Shared JS logic
-    └── style.css                  # Global styles
+├── admin/
+│   ├── admin.html             # Admin dashboard interface
+│   ├── admin.js               # Admin panel functionality
+│   └── admin.css              # Admin dashboard styling
+├── index.html                 # Home page
+├── catalogue.html             # Product listing
+├── product-cora.html          # Product detail
+├── cart.html                  # Shopping cart
+├── checkout.html              # Checkout + payment
+├── confirmation.html          # Order confirmation
+├── profile.html               # User profile
+├── signup.html                # Auth page
+├── contact.html               # Contact form
+├── main.js                    # Shared JS logic
+├── style.css                  # Global styles
+└── signup.png
 ```
 
 ---
@@ -163,8 +161,8 @@ Venyora-Ecommerce/
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/venyora-Ecommerce.git
-cd VENYORA-ECOMMERCE-MAIN
+git clone https://github.com/DK0483/Venyora-Ecommerce.git
+cd Venyora-Ecommerce
 ```
 
 **2. Install backend dependencies**
@@ -243,15 +241,13 @@ nodemon server.js
 | POST   | `/api/payment/create-order` | Create Razorpay order     |
 | POST   | `/api/payment/verify`       | Verify & place paid order |
 
-### Wishlist & Reviews
+### Reviews
 
-| Method | Endpoint                  | Description              |
-| ------ | ------------------------- | ------------------------ |
-| GET    | `/api/wishlist`           | Get user wishlist        |
-| POST   | `/api/wishlist/toggle`    | Add/remove from wishlist |
-| GET    | `/api/reviews/:productId` | Get product reviews      |
-| POST   | `/api/reviews/:productId` | Submit review            |
-| DELETE | `/api/reviews/:reviewId`  | Delete own review        |
+| Method | Endpoint                  | Description         |
+| ------ | ------------------------- | ------------------- |
+| GET    | `/api/reviews/:productId` | Get product reviews |
+| POST   | `/api/reviews/:productId` | Submit review       |
+| DELETE | `/api/reviews/:reviewId`  | Delete own review   |
 
 ---
 
