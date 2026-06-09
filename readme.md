@@ -264,7 +264,7 @@ nodemon server.js
 ## 🛣️ Roadmap
 
 - [x] Product search & filters
-- [x] Wishlist
+- [ ] Wishlist
 - [x] Reviews & ratings
 - [x] Razorpay payment integration
 - [x] Stock management
