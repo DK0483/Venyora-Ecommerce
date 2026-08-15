@@ -304,9 +304,15 @@ async function addProduct() {
     },
     body: JSON.stringify({
       name: document.getElementById("addName").value,
+
       price: document.getElementById("addPrice").value,
+
       stock: document.getElementById("addStock").value,
+
+      category: document.getElementById("product-category").value,
+
       imageUrl: document.getElementById("addImageUrl").value,
+      
       description: document.getElementById("addDescription").value,
     })
   });

@@ -361,3 +361,25 @@ button:hover {
   font-size: 12px;
   font-weight: 600;
 }
+
+#product-category {
+    width: 100%;
+    padding: 12px 10px;
+    margin-bottom: 12px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    background: #fff;
+    color: #333;
+
+    font-size: 14px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+#product-category:focus {
+    border-color: #111;
+}
