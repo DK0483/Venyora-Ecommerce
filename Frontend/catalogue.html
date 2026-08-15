@@ -1,106 +1,1207 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-      rel="stylesheet"
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
     />
+
+    <!-- Remix Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+        rel="stylesheet"
+    />
+
+    <!-- EXISTING CSS - NOT CHANGED -->
     <link rel="stylesheet" href="style.css" />
+
     <title>Catalogue | VENYORA</title>
 
-    <!-- ✅ FIX: ensure products display as grid -->
-<style>
-  .catalogue__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 4rem;
-      margin-top: 2rem;
-  }
 
-  .product-card {
-      border: 1px solid #eee;
-      border-radius: 10px;
-      background: #fff;
-      overflow: visible;              /* ✅ important */
-      display: flex;                 /* ✅ important */
-      flex-direction: column;        /* ✅ important */
-      transition: transform 0.2s ease;
-  }
+    <!-- =====================================================
+         PREMIUM CATALOGUE DESIGN
+         Everything below is ONLY for this page.
+         Existing JS / backend / products are untouched.
+    ====================================================== -->
 
-  .product-card:hover {
-      transform: translateY(-4px);
-  }
+    <style>
 
-  .product-card img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-  }
+        /* =====================================================
+           PAGE BACKGROUND
+        ====================================================== */
 
-  /* 🔥 THIS FIXES THE GAP */
-  .product-card-content {
-      padding: 0.8rem 0.8rem 0.6rem;
-      text-align: center;
-  }
+        body.catalogue-page {
 
-  .product-card-content h4 {
-      font-size: 1rem;
-      margin: 0.4rem 0 0.2rem;
-      line-height: 1.3;
-  }
+            margin: 0;
 
-  .product-card-content p {
-      margin: 0;
-      font-weight: 600;
-      font-size: 0.95rem;
-  }
+            min-height: 100vh;
 
-  .product-card-content .btn {
-      margin-top: 0.6rem;   /* ✅ button pushed just enough */
-      padding: 0.6rem;
-      width: 100%;
-      font-size: 0.9rem;
-  }
-</style>
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(12, 10, 10, 0.94) 0%,
+                    rgba(12, 10, 10, 0.84) 30%,
+                    rgba(12, 10, 10, 0.65) 55%,
+                    rgba(12, 10, 10, 0.35) 100%
+                ),
+                url("assets/catalogue-bg.png")
+                center top / cover
+                fixed
+                no-repeat;
+
+            color: #171515;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .catalogue-page nav {
+
+            position: relative;
+
+            z-index: 100;
+
+            background:
+                rgba(255, 255, 255, 0.94);
+
+            backdrop-filter:
+                blur(14px);
+
+            -webkit-backdrop-filter:
+                blur(14px);
+
+            box-shadow:
+                0 1px 0 rgba(0, 0, 0, 0.05);
+
+        }
+
+
+        /* =====================================================
+           NAVIGATION LINKS
+        ====================================================== */
+
+        .catalogue-page .nav__links a {
+
+            position: relative;
+
+        }
+
+
+        .catalogue-page .nav__links a:not(.btn)::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: -6px;
+
+            width: 100%;
+
+            height: 1px;
+
+            background: #111;
+
+            transform:
+                scaleX(0);
+
+            transform-origin:
+                right;
+
+            transition:
+                transform 0.35s
+                cubic-bezier(.22, 1, .36, 1);
+
+        }
+
+
+        .catalogue-page .nav__links a:not(.btn):hover::after,
+        .catalogue-page .nav__links a.active::after {
+
+            transform:
+                scaleX(1);
+
+            transform-origin:
+                left;
+
+        }
+
+
+        /* =====================================================
+           SIGN UP BUTTON
+        ====================================================== */
+
+        .catalogue-page .nav__links .btn {
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+        }
+
+
+        .catalogue-page .nav__links .btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.15);
+
+        }
+
+
+        /* =====================================================
+           CATALOGUE HEADER
+        ====================================================== */
+
+        .catalogue-header {
+
+            position: relative;
+
+            z-index: 3;
+
+            width: 100%;
+
+            padding:
+                5.5rem 1.5rem 3.5rem;
+
+            box-sizing: border-box;
+
+            text-align: center;
+
+        }
+
+
+        .catalogue-heading {
+
+            max-width: 900px;
+
+            margin:
+                0 auto;
+
+            animation:
+                catalogueHeadingIn
+                1s
+                cubic-bezier(.22, 1, .36, 1)
+                both;
+
+        }
+
+
+        /* Small label */
+
+        .catalogue-eyebrow {
+
+            display: block;
+
+            margin-bottom:
+                1rem;
+
+            color:
+                #c9a49a;
+
+            font-size:
+                0.68rem;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                0.32em;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        /* Main heading */
+
+        .catalogue-heading h1 {
+
+            margin:
+                0;
+
+            color:
+                #f7f1eb;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size:
+                clamp(3.3rem, 6vw, 5.8rem);
+
+            font-weight:
+                500;
+
+            line-height:
+                0.95;
+
+            letter-spacing:
+                -0.04em;
+
+        }
+
+
+        /* Subtitle */
+
+        .catalogue-heading p {
+
+            max-width:
+                470px;
+
+            margin:
+                1.4rem auto 0;
+
+            color:
+                rgba(255, 255, 255, 0.72);
+
+            font-size:
+                0.82rem;
+
+            line-height:
+                1.7;
+
+            letter-spacing:
+                0.04em;
+
+        }
+
+
+        /* Small decorative line */
+
+        .catalogue-line {
+
+            width:
+                55px;
+
+            height:
+                1px;
+
+            margin:
+                1.6rem auto 0;
+
+            background:
+                #c9a49a;
+
+        }
+
+
+        @keyframes catalogueHeadingIn {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(30px);
+
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PRODUCT SECTION
+        ====================================================== */
+
+        .catalogue-page
+        .section__container {
+
+            position:
+                relative;
+
+            z-index:
+                3;
+
+        }
+
+
+        /* =====================================================
+           PRODUCT GRID
+
+           IMPORTANT:
+           Same ID is preserved:
+           #product-catalogue
+
+           main.js can continue rendering products normally.
+        ====================================================== */
+
+        .catalogue__grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(250px, 1fr)
+                );
+
+            gap:
+                1.4rem;
+
+            width:
+                min(
+                    1280px,
+                    calc(100% - 80px)
+                );
+
+            margin:
+                0 auto 6rem;
+
+            padding:
+                1.5rem;
+
+            box-sizing:
+                border-box;
+
+            background:
+                rgba(
+                    248,
+                    246,
+                    242,
+                    0.91
+                );
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+
+            box-shadow:
+                0 35px 100px
+                rgba(0, 0, 0, 0.30);
+
+        }
+
+
+        /* =====================================================
+           PRODUCT CARD
+
+           Existing .product-card class preserved.
+        ====================================================== */
+
+        .catalogue-page .product-card {
+
+            position:
+                relative;
+
+            border:
+                none;
+
+            border-radius:
+                0;
+
+            background:
+                #ffffff;
+
+            overflow:
+                hidden;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            transform:
+                translateY(0);
+
+            transform-style:
+                preserve-3d;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0, 0, 0, 0.07);
+
+            transition:
+                transform 0.55s
+                cubic-bezier(.22, 1, .36, 1),
+
+                box-shadow 0.55s ease;
+
+            animation:
+                productCardIn
+                0.8s
+                cubic-bezier(.22, 1, .36, 1)
+                both;
+
+        }
+
+
+        /* Staggered appearance */
+
+        .catalogue-page
+        .product-card:nth-child(1) {
+
+            animation-delay:
+                0.05s;
+
+        }
+
+
+        .catalogue-page
+        .product-card:nth-child(2) {
+
+            animation-delay:
+                0.12s;
+
+        }
+
+
+        .catalogue-page
+        .product-card:nth-child(3) {
+
+            animation-delay:
+                0.19s;
+
+        }
+
+
+        .catalogue-page
+        .product-card:nth-child(4) {
+
+            animation-delay:
+                0.26s;
+
+        }
+
+
+        .catalogue-page
+        .product-card:nth-child(5) {
+
+            animation-delay:
+                0.33s;
+
+        }
+
+
+        .catalogue-page
+        .product-card:nth-child(6) {
+
+            animation-delay:
+                0.40s;
+
+        }
+
+
+        @keyframes productCardIn {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(35px);
+
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CARD HOVER
+        ====================================================== */
+
+        @media (min-width: 769px) {
+
+            .catalogue-page
+            .product-card:hover {
+
+                transform:
+                    translateY(-10px);
+
+                box-shadow:
+                    0 30px 70px
+                    rgba(0, 0, 0, 0.17);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PRODUCT IMAGE
+        ====================================================== */
+
+        .catalogue-page
+        .product-card img {
+
+            width:
+                100%;
+
+            height:
+                350px;
+
+            object-fit:
+                cover;
+
+            display:
+                block;
+
+            transition:
+                transform 0.8s
+                cubic-bezier(.22, 1, .36, 1),
+
+                filter 0.5s ease;
+
+        }
+
+
+        /* Image zoom */
+
+        .catalogue-page
+        .product-card:hover img {
+
+            transform:
+                scale(1.045);
+
+            filter:
+                brightness(0.95);
+
+        }
+
+
+        /* =====================================================
+           PRODUCT CONTENT
+        ====================================================== */
+
+        .catalogue-page
+        .product-card-content {
+
+            padding:
+                1.15rem
+                1.15rem
+                1.25rem;
+
+            text-align:
+                center;
+
+            background:
+                #ffffff;
+
+        }
+
+
+        /* Product name */
+
+        .catalogue-page
+        .product-card-content h4 {
+
+            margin:
+                0.2rem
+                0
+                0.45rem;
+
+            color:
+                #171515;
+
+            font-size:
+                0.85rem;
+
+            line-height:
+                1.4;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                0.01em;
+
+        }
+
+
+        /* Price */
+
+        .catalogue-page
+        .product-card-content p {
+
+            margin:
+                0 0 0.9rem;
+
+            color:
+                #666666;
+
+            font-size:
+                0.78rem;
+
+            font-weight:
+                500;
+
+            letter-spacing:
+                0.04em;
+
+        }
+
+
+        /* =====================================================
+           PRODUCT BUTTON
+        ====================================================== */
+
+        .catalogue-page
+        .product-card-content .btn {
+
+            width:
+                100%;
+
+            margin:
+                0;
+
+            padding:
+                0.75rem;
+
+            box-sizing:
+                border-box;
+
+            border:
+                1px solid #171515;
+
+            background:
+                #171515;
+
+            color:
+                #ffffff;
+
+            font-size:
+                0.68rem;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                0.14em;
+
+            text-transform:
+                uppercase;
+
+            transition:
+                all 0.35s
+                cubic-bezier(.22, 1, .36, 1);
+
+        }
+
+
+        .catalogue-page
+        .product-card-content .btn:hover {
+
+            background:
+                transparent;
+
+            color:
+                #171515;
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* =====================================================
+           PREMIUM IMAGE SHINE
+        ====================================================== */
+
+        .catalogue-page
+        .product-card::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            top:
+                0;
+
+            left:
+                -130%;
+
+            width:
+                60%;
+
+            height:
+                100%;
+
+            z-index:
+                4;
+
+            pointer-events:
+                none;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.28),
+                    transparent
+                );
+
+            transform:
+                skewX(-20deg);
+
+            transition:
+                left 0.8s ease;
+
+        }
+
+
+        .catalogue-page
+        .product-card:hover::before {
+
+            left:
+                140%;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 768px) {
+
+            body.catalogue-page {
+
+                background:
+                    linear-gradient(
+                        rgba(12, 10, 10, 0.90),
+                        rgba(12, 10, 10, 0.90)
+                    ),
+                    url("assets/catalogue-bg.png")
+                    center top / cover
+                    no-repeat;
+
+            }
+
+
+            .catalogue-header {
+
+                padding:
+                    3.5rem 1rem 2.5rem;
+
+            }
+
+
+            .catalogue-heading h1 {
+
+                font-size:
+                    3.4rem;
+
+            }
+
+
+            .catalogue-heading p {
+
+                font-size:
+                    0.75rem;
+
+            }
+
+
+            .catalogue__grid {
+
+                width:
+                    calc(100% - 24px);
+
+                grid-template-columns:
+                    1fr;
+
+                gap:
+                    1.2rem;
+
+                padding:
+                    1rem;
+
+                margin-bottom:
+                    4rem;
+
+            }
+
+
+            .catalogue-page
+            .product-card img {
+
+                height:
+                    420px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY
+        ====================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .catalogue-page
+            .product-card,
+
+            .catalogue-page
+            .product-card img,
+
+            .catalogue-heading {
+
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
+
+            }
+
+        }
+
+            /* =====================================================
+            FIX: PRODUCT CONTENT / PRICE / BUTTON VISIBILITY
+            ===================================================== */
+
+            /* Remove any old fixed card sizing */
+            .catalogue-page .product-card {
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
+                aspect-ratio: auto !important;
+
+                overflow: visible !important;
+
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+
+            /* Image stays on top */
+            .catalogue-page .product-card img {
+                position: relative;
+                z-index: 1;
+
+                width: 100% !important;
+                height: 350px !important;
+
+                flex-shrink: 0;
+
+                object-fit: cover;
+            }
+
+
+            /* Product information MUST be visible */
+            .catalogue-page .product-card-content {
+                position: relative;
+
+                z-index: 10;
+
+                display: flex !important;
+                flex-direction: column !important;
+
+                width: 100%;
+                min-height: 125px;
+
+                box-sizing: border-box;
+
+                padding: 1.15rem !important;
+
+                background: #ffffff;
+
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+
+            /* Product name */
+            .catalogue-page .product-card-content h4 {
+                display: block !important;
+
+                margin:
+                    0 0 .45rem !important;
+
+                opacity: 1 !important;
+                visibility: visible !important;
+
+                color: #171515 !important;
+            }
+
+
+            /* Price */
+            .catalogue-page .product-card-content p {
+                display: block !important;
+
+                margin:
+                    0 0 .9rem !important;
+
+                opacity: 1 !important;
+                visibility: visible !important;
+
+                color: #555 !important;
+            }
+
+
+            /* View button */
+            .catalogue-page .product-card-content .btn {
+                display: block !important;
+
+                position: relative;
+
+                z-index: 20;
+
+                opacity: 1 !important;
+                visibility: visible !important;
+
+                pointer-events: auto !important;
+
+                cursor: pointer;
+            }
+
+
+            /* Don't let the shine layer cover interactions */
+            .catalogue-page .product-card::before {
+                pointer-events: none !important;
+            }
+
+
+            /* Keep grid from clipping cards */
+            .catalogue-page .catalogue__grid {
+                height: auto !important;
+                max-height: none !important;
+
+                overflow: visible !important;
+
+                align-items: start;
+            }
+
+
+            /* Product section must also be able to expand */
+            .catalogue-page
+            .section__container:has(.catalogue__grid) {
+                height: auto !important;
+                max-height: none !important;
+
+                overflow: visible !important;
+            }
+
+    </style>
+
 </head>
+
+
 <body class="catalogue-page">
+
+
+    <!-- =====================================================
+         EXISTING NAVBAR
+         IDs / LINKS / AUTH / CART ALL PRESERVED
+    ====================================================== -->
+
     <nav>
-      <div class="nav__header">
-        <div class="nav__logo">
-          <a href="index.html">VENYORA</a>
+
+        <div class="nav__header">
+
+            <div class="nav__logo">
+
+                <a href="index.html">
+                    VENYORA
+                </a>
+
+            </div>
+
+
+            <div
+                class="nav__menu__btn"
+                id="menu-btn"
+            >
+
+                <i class="ri-menu-line"></i>
+
+            </div>
+
         </div>
-        <div class="nav__menu__btn" id="menu-btn">
-          <i class="ri-menu-line"></i>
-        </div>
-      </div>
-      <ul class="nav__links" id="nav-links">
-        <li><a href="catalogue.html" class="active">CATALOGUE</a></li>
-        <li><a href="index.html#fashion">FASHION</a></li>
-        <li><a href="index.html#favourite">FAVOURITE</a></li>
-        <li><a href="index.html#lifestyle">LIFESTYLE</a></li>
-        <li id="user-auth-links">
-          <a href="signup.html" class="btn">SIGN UP</a>
-        </li>
-        <li id="nav-cart-item" style="display: none;">
-            <a href="cart.html" class="nav__cart">
-              <i class="ri-shopping-cart-2-line"></i>
-              <span id="cart-count">0</span>
-            </a>
-        </li>
-      </ul>
+
+
+        <ul
+            class="nav__links"
+            id="nav-links"
+        >
+
+            <li>
+
+                <a
+                    href="catalogue.html"
+                    class="active"
+                >
+                    CATALOGUE
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="index.html#fashion">
+                    FASHION
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="index.html#favourite">
+                    FAVOURITE
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="index.html#lifestyle">
+                    LIFESTYLE
+                </a>
+
+            </li>
+
+
+            <!-- EXISTING AUTH -->
+
+            <li id="user-auth-links">
+
+                <a
+                    href="signup.html"
+                    class="btn"
+                >
+                    SIGN UP
+                </a>
+
+            </li>
+
+
+            <!-- EXISTING CART -->
+
+            <li
+                id="nav-cart-item"
+                style="display: none;"
+            >
+
+                <a
+                    href="cart.html"
+                    class="nav__cart"
+                >
+
+                    <i
+                        class="ri-shopping-cart-2-line"
+                    ></i>
+
+                    <span id="cart-count">
+                        0
+                    </span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
     </nav>
 
-    <header class="section__container catalogue-header">
-        <h1 class="section__header">Our Collection</h1>
+
+    <!-- =====================================================
+         PREMIUM COLLECTION HEADER
+    ====================================================== -->
+
+    <header class="catalogue-header">
+
+        <div class="catalogue-heading">
+
+            <span class="catalogue-eyebrow">
+                VENYORA EDIT
+            </span>
+
+
+            <h1>
+                Our Collection
+            </h1>
+
+
+            <p>
+                Curated pieces designed for
+                everyday elegance.
+            </p>
+
+
+            <div class="catalogue-line"></div>
+
+        </div>
+
     </header>
 
-    <!-- ✅ THIS IS WHERE PRODUCTS RENDER -->
+
+    <!-- =====================================================
+         EXISTING PRODUCT SECTION
+         
+         IMPORTANT:
+         id="product-catalogue" is unchanged.
+         
+         main.js will continue to populate
+         products exactly as before.
+    ====================================================== -->
+
     <section class="section__container">
-        <div class="catalogue__grid" id="product-catalogue"></div>
+
+        <div
+            class="catalogue__grid"
+            id="product-catalogue"
+        ></div>
+
     </section>
 
+
+    <!-- =====================================================
+         EXISTING JAVASCRIPT
+         
+         DO NOT CHANGE
+    ====================================================== -->
+
     <script src="main.js"></script>
+
+
+    <!-- Your smooth 3D effects -->
+
+    <script src="venyora-effects.js"></script>
+
+
 </body>
+
 </html>

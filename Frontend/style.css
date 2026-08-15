@@ -2167,3 +2167,548 @@ body {
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* =========================================================
+   VENYORA — PREMIUM SMOOTH 3D INTERFACE
+   Visual-only enhancement layer -------------------------------------------------------------------------------
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   ROOT SETTINGS
+--------------------------------------------------------- */
+
+:root {
+
+    --vny-ease:
+        cubic-bezier(.22, 1, .36, 1);
+
+    --vny-fast:
+        cubic-bezier(.4, 0, .2, 1);
+
+    --vny-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.10);
+
+}
+
+
+/* ---------------------------------------------------------
+   SMOOTH SCROLL
+--------------------------------------------------------- */
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+
+    text-rendering: optimizeLegibility;
+
+}
+
+
+/* ---------------------------------------------------------
+   BUTTONS
+--------------------------------------------------------- */
+
+.btn,
+button,
+.add-to-bag-btn {
+
+    transition:
+        transform .28s var(--vny-ease),
+        box-shadow .28s var(--vny-ease),
+        background-color .28s ease,
+        color .28s ease,
+        border-color .28s ease;
+
+}
+
+
+.btn:hover,
+button:hover,
+.add-to-bag-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.12);
+
+}
+
+
+.btn.vny-pressed,
+button.vny-pressed,
+.add-to-bag-btn.vny-pressed {
+
+    transform:
+        translateY(0)
+        scale(.98);
+
+}
+
+
+/* ---------------------------------------------------------
+   PRODUCT CARDS — 3D
+--------------------------------------------------------- */
+
+.product-card,
+.arrival__card,
+.favourite__card {
+
+    transform-style:
+        preserve-3d;
+
+    perspective:
+        1000px;
+
+    will-change:
+        transform;
+
+    transition:
+        transform .45s var(--vny-ease),
+        box-shadow .45s var(--vny-ease);
+
+}
+
+
+/* Active 3D movement */
+
+.product-card.vny-tilting,
+.arrival__card.vny-tilting,
+.favourite__card.vny-tilting {
+
+    transform:
+
+        perspective(1000px)
+
+        rotateX(
+            var(--vny-rx, 0deg)
+        )
+
+        rotateY(
+            var(--vny-ry, 0deg)
+        )
+
+        translateY(-6px);
+
+    box-shadow:
+
+        0 25px 55px
+        rgba(0, 0, 0, 0.14);
+
+}
+
+
+/* ---------------------------------------------------------
+   PRODUCT IMAGE DEPTH
+--------------------------------------------------------- */
+
+.product-card img,
+.arrival__card img,
+.favourite__card img {
+
+    transform:
+
+        translate3d(
+            var(--vny-img-x, 0px),
+            var(--vny-img-y, 0px),
+            0
+        )
+
+        scale(1.001);
+
+    transition:
+
+        transform .45s var(--vny-ease),
+        filter .35s ease;
+
+    will-change:
+        transform;
+
+}
+
+
+.product-card:hover img,
+.arrival__card:hover img,
+.favourite__card:hover img {
+
+    filter:
+        saturate(1.03);
+
+}
+
+
+/* ---------------------------------------------------------
+   HERO SECTION
+--------------------------------------------------------- */
+
+.header__container {
+
+    position:
+        relative;
+
+    isolation:
+        isolate;
+
+}
+
+
+/* Soft moving light */
+
+.header__container::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        -15%;
+
+    z-index:
+        -1;
+
+    pointer-events:
+        none;
+
+    opacity:
+        .55;
+
+    background:
+
+        radial-gradient(
+
+            circle at
+            var(--vny-mx, 50%)
+            var(--vny-my, 45%),
+
+            rgba(0, 0, 0, .055),
+
+            transparent 28%
+
+        );
+
+    transition:
+        opacity .5s ease;
+
+}
+
+
+/* Hero image */
+
+.header__image {
+
+    transform-style:
+        preserve-3d;
+
+    will-change:
+        transform;
+
+}
+
+
+.header__image.vny-tilting,
+.sale__image.vny-tilting {
+
+    transform:
+
+        perspective(1100px)
+
+        rotateX(
+            var(--vny-rx, 0deg)
+        )
+
+        rotateY(
+            var(--vny-ry, 0deg)
+        )
+
+        translateZ(8px);
+
+}
+
+
+.header__image img,
+.sale__image img {
+
+    transition:
+        transform .5s var(--vny-ease),
+        filter .4s ease;
+
+}
+
+
+.header__image:hover img,
+.sale__image:hover img {
+
+    transform:
+        scale(1.025);
+
+}
+
+
+/* ---------------------------------------------------------
+   SCROLL REVEAL
+--------------------------------------------------------- */
+
+.vny-reveal {
+
+    opacity:
+        0;
+
+    transform:
+        translateY(24px);
+
+    transition:
+
+        opacity .7s var(--vny-ease),
+
+        transform .7s var(--vny-ease);
+
+}
+
+
+.vny-reveal.vny-revealed {
+
+    opacity:
+        1;
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* ---------------------------------------------------------
+   NAVBAR HOVER
+--------------------------------------------------------- */
+
+.nav__links a {
+
+    position:
+        relative;
+
+}
+
+
+.nav__links a::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    bottom:
+        -6px;
+
+    width:
+        100%;
+
+    height:
+        1px;
+
+    background:
+        currentColor;
+
+    transform:
+        scaleX(0);
+
+    transform-origin:
+        right;
+
+    transition:
+        transform .35s var(--vny-ease);
+
+}
+
+
+.nav__links a:hover::after {
+
+    transform:
+        scaleX(1);
+
+    transform-origin:
+        left;
+
+}
+
+
+/* ---------------------------------------------------------
+   IMAGE LOADING
+--------------------------------------------------------- */
+
+img {
+
+    backface-visibility:
+        hidden;
+
+}
+
+
+.vny-image-loaded {
+
+    animation:
+        vnyImageAppear .45s var(--vny-ease);
+
+}
+
+
+@keyframes vnyImageAppear {
+
+    from {
+
+        opacity:
+            .75;
+
+        transform:
+            scale(.985);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            scale(1);
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   PAGE READY
+--------------------------------------------------------- */
+
+.vny-ready body {
+
+    animation:
+        vnyPageAppear .45s var(--vny-ease);
+
+}
+
+
+@keyframes vnyPageAppear {
+
+    from {
+
+        opacity:
+            .96;
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    html {
+
+        scroll-behavior:
+            auto;
+
+    }
+
+
+    .product-card,
+    .arrival__card,
+    .favourite__card,
+    .header__image,
+    .sale__image {
+
+        transform:
+            none !important;
+
+        transition:
+            box-shadow .3s ease,
+            transform .3s ease;
+
+    }
+
+
+    .product-card img,
+    .arrival__card img,
+    .favourite__card img {
+
+        transform:
+            none !important;
+
+    }
+
+
+    .header__container::before {
+
+        display:
+            none;
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+
+        scroll-behavior:
+            auto;
+
+    }
+
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            .01ms !important;
+
+    }
+
+
+    .vny-reveal {
+
+        opacity:
+            1;
+
+        transform:
+            none;
+
+    }
+
+}
