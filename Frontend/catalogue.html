@@ -42,10 +42,9 @@
             background:
                 linear-gradient(
                     90deg,
-                    rgba(12, 10, 10, 0.94) 0%,
-                    rgba(12, 10, 10, 0.84) 30%,
-                    rgba(12, 10, 10, 0.65) 55%,
-                    rgba(12, 10, 10, 0.35) 100%
+                    rgba(248, 247, 243, 0.96) 0%,
+                    rgba(248, 247, 243, 0.9) 45%,
+                    rgba(248, 247, 243, 0.76) 100%
                 ),
                 url("assets/catalogue-bg.png")
                 center top / cover
@@ -231,7 +230,7 @@
                 0;
 
             color:
-                #f7f1eb;
+                #1b211c;
 
             font-family:
                 Georgia,
@@ -264,7 +263,7 @@
                 1.4rem auto 0;
 
             color:
-                rgba(255, 255, 255, 0.72);
+                rgba(27, 33, 28, 0.72);
 
             font-size:
                 0.82rem;
@@ -797,8 +796,8 @@
 
                 background:
                     linear-gradient(
-                        rgba(12, 10, 10, 0.90),
-                        rgba(12, 10, 10, 0.90)
+                        rgba(248, 247, 243, 0.76),
+                        rgba(248, 247, 243, 0.76)
                     ),
                     url("assets/catalogue-bg.png")
                     center top / cover
@@ -1012,6 +1011,21 @@
                 overflow: visible !important;
             }
 
+        /* The shared navigation toggle selects this darker catalogue variant. */
+        body.catalogue-page[data-theme="dark"] {
+            background:
+                linear-gradient(90deg, rgba(12,10,10,.92), rgba(12,10,10,.76) 52%, rgba(12,10,10,.45)),
+                url("assets/catalogue-bg.png") center top / cover fixed no-repeat;
+        }
+        .catalogue-page[data-theme="dark"] .catalogue-heading h1 { color: #f7f1eb; }
+        .catalogue-page[data-theme="dark"] .catalogue-heading p { color: rgba(255,255,255,.72); }
+        @media (max-width: 768px) {
+            body.catalogue-page[data-theme="dark"] {
+                background:
+                    linear-gradient(rgba(12,10,10,.74), rgba(12,10,10,.74)),
+                    url("assets/catalogue-bg.png") center top / cover no-repeat;
+            }
+        }
     </style>
 
 </head>

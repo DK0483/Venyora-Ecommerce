@@ -1,113 +1,45 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const authMiddleware = require('../middleware/authMiddleware');
-
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { body } = require("express-validator");
+const User = require("../models/user");
+const authMiddleware = require("../middleware/authMiddleware");
+const { authLimiter } = require("../middleware/rateLimiters");
+const { failValidation, cleanText, email, password } = require("../middleware/validators");
+const audit = require("../utils/audit");
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: 'Please enter all fields' });
-        }
-
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ message: 'User with this email already exists' });
-        }
-
-        user = new User({
-            name,
-            email,
-            password,
-        });
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-
-        await user.save();
-
-        res.status(201).json({ message: 'User registered successfully!' });
-
-    } catch (err) {
-        console.error('REGISTER ERROR:', err);
-        res.status(500).json({ message: 'Server error during registration' });
-    }
-});
-
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Please enter all fields' });
-        }
-
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        const payload = {
-            user: {
-                id: user.id,
-                role: user.role
-            },
-        };
-
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: '7d' },
-            (err, token) => {
-                if (err) throw err;
-                res.json({ token });
-            }
-        );
-
-    } catch (err) {
-        console.error('LOGIN ERROR:', err);
-        res.status(500).json({ message: 'Server error during login' });
-    }
-});
-
-router.get('/user', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
-    } catch (err) {
-        console.error('USER FETCH ERROR:', err);
-        res.status(500).json({ message: 'Server error fetching user' });
-    }
-});
-
-router.put("/update-profile", authMiddleware, async (req, res) => {
+router.post("/register", authLimiter, [cleanText("name", "Name", { min: 2, max: 80 }), email(), password, failValidation], async (req, res, next) => {
   try {
-    const { name, email, gender, mobile, age } = req.body;
+    const { name, email: userEmail, password: rawPassword } = req.body;
+    if (await User.exists({ email: userEmail })) return res.status(409).json({ message: "An account with this email already exists" });
+    const user = await User.create({ name, email: userEmail, password: await bcrypt.hash(rawPassword, 12) });
+    await audit(req, "USER_REGISTERED", "User", user._id, { email: user.email });
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) { next(error); }
+});
 
-    const user = await User.findById(req.user.id);
+router.post("/login", authLimiter, [email(), body("password").isString().isLength({ min: 1, max: 72 }).withMessage("Invalid credentials"), failValidation], async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) return res.status(401).json({ message: "Invalid email or password" });
+    const token = jwt.sign({ user: { id: user.id, role: user.role } }, process.env.JWT_SECRET, { expiresIn: "7d", issuer: "venyora-api", audience: "venyora-web" });
+    await audit({ ...req, user: { id: user.id } }, "USER_LOGGED_IN", "User", user._id);
+    res.json({ token });
+  } catch (error) { next(error); }
+});
 
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.gender = gender || user.gender;
-    user.mobile = mobile || user.mobile;
-    user.age = age || user.age;
+router.get("/user", authMiddleware, async (req, res, next) => { try { const user = await User.findById(req.user.id).select("-password"); if (!user) return res.status(404).json({ message: "User not found" }); res.json(user); } catch (error) { next(error); } });
 
-    await user.save();
-
-    res.json({ message: "Profile updated successfully" });
-
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
+router.put("/update-profile", authMiddleware, [cleanText("name", "Name", { min: 2, max: 80 }).optional(), email().optional(), body("gender").optional().isIn(["male", "female", "other", "prefer_not_to_say"]), body("mobile").optional().matches(/^\+?[1-9]\d{7,14}$/), body("age").optional().isInt({ min: 13, max: 120 }).toInt(), failValidation], async (req, res, next) => {
+  try {
+    const allowed = ["name", "email", "gender", "mobile", "age"];
+    const update = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => allowed.includes(key) && value !== undefined));
+    if (update.email && await User.exists({ email: update.email, _id: { $ne: req.user.id } })) return res.status(409).json({ message: "Email already in use" });
+    const user = await User.findByIdAndUpdate(req.user.id, { $set: update }, { new: true, runValidators: true }).select("-password");
+    await audit(req, "PROFILE_UPDATED", "User", req.user.id, { fields: Object.keys(update) });
+    res.json({ message: "Profile updated successfully", user });
+  } catch (error) { next(error); }
 });
 
 module.exports = router;

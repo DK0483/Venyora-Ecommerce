@@ -34,6 +34,34 @@ const updateCartCount = async () => {
 document.addEventListener("DOMContentLoaded", async () => {
   let selectedSize = null;
 
+  // ================= THEME TOGGLE =================
+  const savedTheme = localStorage.getItem("venyora-theme");
+  if (savedTheme === "light" || savedTheme === "dark") document.body.dataset.theme = savedTheme;
+  else if (document.body.classList.contains("catalogue-page")) document.body.dataset.theme = "light";
+
+  const navLinksForTheme = document.getElementById("nav-links");
+  if (navLinksForTheme && !document.getElementById("theme-toggle")) {
+    const themeItem = document.createElement("li");
+    themeItem.className = "theme-toggle-item";
+    themeItem.innerHTML = `<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode" title="Switch to light mode"><i class="ri-sun-line"></i><span>Light</span></button>`;
+    navLinksForTheme.insertBefore(themeItem, navLinksForTheme.firstChild);
+
+    const themeToggle = document.getElementById("theme-toggle");
+    const updateThemeToggle = () => {
+      const isLight = document.body.dataset.theme === "light";
+      themeToggle.innerHTML = `<i class="ri-${isLight ? "moon-clear-line" : "sun-line"}"></i><span>${isLight ? "Dark" : "Light"}</span>`;
+      themeToggle.setAttribute("aria-label", `Switch to ${isLight ? "dark" : "light"} mode`);
+      themeToggle.title = themeToggle.getAttribute("aria-label");
+    };
+    updateThemeToggle();
+    themeToggle.addEventListener("click", () => {
+      const isLight = document.body.dataset.theme === "light";
+      document.body.dataset.theme = isLight ? "dark" : "light";
+      localStorage.setItem("venyora-theme", isLight ? "dark" : "light");
+      updateThemeToggle();
+    });
+  }
+
   updateCartCount();
 
   const token = localStorage.getItem("venyora-token");

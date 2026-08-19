@@ -3,11 +3,13 @@ const router = express.Router();
 const Product = require("../models/product");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const audit = require("../utils/audit");
 
 // ADD PRODUCT
 router.post("/", authMiddleware, adminMiddleware, async (req, res) => {
   const product = new Product(req.body);
   await product.save();
+  await audit(req, "ADMIN_PRODUCT_CREATED", "Product", product._id);
   res.json(product);
 });
 
@@ -18,12 +20,16 @@ router.put("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     req.body,
     { new: true }
   );
+  if (!updated) return res.status(404).json({ message: "Product not found" });
+  await audit(req, "ADMIN_PRODUCT_UPDATED", "Product", updated._id);
   res.json(updated);
 });
 
 // DELETE PRODUCT
 router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
+  const deleted = await Product.findByIdAndDelete(req.params.id);
+  if (!deleted) return res.status(404).json({ message: "Product not found" });
+  await audit(req, "ADMIN_PRODUCT_DELETED", "Product", deleted._id);
   res.json({ message: "Product deleted" });
 });
 

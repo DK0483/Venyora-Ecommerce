@@ -7,6 +7,7 @@
 <title>VENYORA | Luxury Fashion</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
 
@@ -369,10 +370,24 @@ button:hover{
 
 }
 
+/* Dark premium auth theme — photography is deliberately untouched. */
+body.auth-page { background: #111410; color: #f2f0e8; }
+.auth-page .right { background: radial-gradient(circle at 80% 10%, rgba(87,110,89,.18), transparent 28rem), #151a15; }
+.auth-page .auth-card { background: rgba(29,35,29,.88); border-color: rgba(242,240,232,.12); box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+.auth-page .brand, .auth-page .form-title { color: #f2f0e8; }.auth-page .tagline, .auth-page .toggle-text, .auth-page .forgot { color: #b8c1b8; }
+.auth-page input { border-color: rgba(242,240,232,.24); color: #f2f0e8; }.auth-page input::placeholder { color: #aeb6aa; }.auth-page input:focus { border-color: #d6b288; }
+.auth-page button:not(.auth-theme-toggle) { background: #d6b288; color: #172018; }.auth-page button:not(.auth-theme-toggle):hover { background: #eee7db; }
+.auth-page .toggle-text a { color: #d6b288; }
+.auth-theme-toggle { align-items: center; background: rgba(17,20,16,.8); border: 1px solid rgba(242,240,232,.2); border-radius: 999px; color: #f2f0e8; cursor: pointer; display: inline-flex; font: 500 .72rem 'Poppins', sans-serif; gap: .45rem; letter-spacing: .04em; padding: .6rem .85rem; position: fixed; right: 1.25rem; top: 1.25rem; width: auto; z-index: 10; }
+.auth-theme-toggle:hover { background: #d6b288; color: #172018; }
+body.auth-page[data-theme="light"] { background: #f7f3ee; color: #111; }.auth-page[data-theme="light"] .right { background: #f7f3ee; }.auth-page[data-theme="light"] .auth-card { background: rgba(255,255,255,.9); border-color: rgba(0,0,0,.05); box-shadow: 0 20px 50px rgba(0,0,0,.08); }.auth-page[data-theme="light"] .brand, .auth-page[data-theme="light"] .form-title { color: #111; }.auth-page[data-theme="light"] .tagline, .auth-page[data-theme="light"] .toggle-text, .auth-page[data-theme="light"] .forgot { color: #777; }.auth-page[data-theme="light"] input { border-color: #ddd; color: #111; }.auth-page[data-theme="light"] .auth-theme-toggle { background: rgba(255,255,255,.88); border-color: rgba(0,0,0,.15); color: #111; }
+@media(max-width:768px) { .auth-theme-toggle { right: 1rem; top: 1rem; }.auth-page .auth-card { background: rgba(20,25,20,.96); }.auth-page[data-theme="light"] .auth-card { background: rgba(255,255,255,.96); } }
 </style>
 </head>
 
-<body>
+<body class="auth-page">
+
+<button type="button" class="auth-theme-toggle" id="auth-theme-toggle" aria-label="Switch to light mode"><i class="ri-sun-line"></i><span>Light</span></button>
 
 <div class="wrapper">
 
@@ -470,6 +485,21 @@ Already have an account?
 
 
 <script>
+  const authThemeToggle = document.getElementById('auth-theme-toggle');
+  const setAuthTheme = (theme) => {
+    if (theme === 'light') document.body.dataset.theme = 'light';
+    else delete document.body.dataset.theme;
+    const isLight = document.body.dataset.theme === 'light';
+    authThemeToggle.innerHTML = `<i class="ri-${isLight ? 'moon-clear-line' : 'sun-line'}"></i><span>${isLight ? 'Dark' : 'Light'}</span>`;
+    authThemeToggle.setAttribute('aria-label', `Switch to ${isLight ? 'dark' : 'light'} mode`);
+  };
+  setAuthTheme(localStorage.getItem('venyora-theme'));
+  authThemeToggle.addEventListener('click', () => {
+    const nextTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('venyora-theme', nextTheme);
+    setAuthTheme(nextTheme);
+  });
+
   function showSignup() {
     document.getElementById('login-form').classList.add('hidden');
     document.getElementById('signup-form').classList.remove('hidden');

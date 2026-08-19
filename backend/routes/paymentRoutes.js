@@ -5,6 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Order = require("../models/order");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
+const { checkoutLimiter } = require("../middleware/rateLimiters");
  
 const router = express.Router();
  
@@ -18,7 +19,7 @@ const razorpay = new Razorpay({
    Called when user clicks Pay — creates a Razorpay order
    and returns order_id to frontend
 ====================================================== */
-router.post("/create-order", authMiddleware, async (req, res) => {
+router.post("/create-order", authMiddleware, checkoutLimiter, async (req, res) => {
   try {
     const { amount } = req.body; // amount in rupees from frontend
  
@@ -46,7 +47,7 @@ router.post("/create-order", authMiddleware, async (req, res) => {
    Called after Razorpay payment is completed
    Verifies signature, then places the actual order
 ====================================================== */
-router.post("/verify", authMiddleware, async (req, res) => {
+router.post("/verify", authMiddleware, checkoutLimiter, async (req, res) => {
   try {
     const {
       razorpay_order_id,

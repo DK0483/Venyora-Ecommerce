@@ -1818,8 +1818,8 @@ html {
 
   .arrival__image img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
   }
 
   .arrival__content {
@@ -1829,6 +1829,152 @@ html {
   .arrival__content h4 {
     font-size: 1rem;
   }
+}
+
+/* Homepage alignment: retain the original single arrival card and image ratio. */
+#catalogue .arrival__grid {
+  grid-template-columns: minmax(0, 520px);
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  #catalogue .arrival__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Homepage-only dark editorial surface — the catalogue, checkout and account
+   pages retain their own colour systems. */
+body.home-page {
+  --primary-color: #f2f0e8;
+  --secondary-color: #171b17;
+  --white: #111410;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(88, 108, 86, .18), transparent 30rem),
+    radial-gradient(circle at 87% 38%, rgba(105, 82, 58, .13), transparent 25rem),
+    #111410;
+  color: #f2f0e8;
+}
+
+.home-page nav {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid rgba(242, 240, 232, .12);
+}
+
+.home-page .nav__logo a,
+.home-page .nav__links a,
+.home-page a,
+.home-page .section__header,
+.home-page .arrival__content h4,
+.home-page .favourite__content h4,
+.home-page .sale__content h2,
+.home-page .footer__col .footer__logo a,
+.home-page .footer__col h4 {
+  color: #f2f0e8;
+}
+
+.home-page .nav__links a:hover,
+.home-page .arrival__content a:hover,
+.home-page .favourite__content a:hover,
+.home-page .footer__links a:hover {
+  color: #d6b288;
+}
+
+.home-page .header__content h1 span,
+.home-page .sale__content h2 span {
+  -webkit-text-stroke-color: #d6b288;
+}
+
+.home-page .header__content p,
+.home-page .sale__content p,
+.home-page .promo__container p,
+.home-page .footer__col p,
+.home-page .footer__links a {
+  color: #bcc2b9;
+}
+
+.home-page .btn {
+  background: #e8e5dc;
+  color: #171b17;
+}
+
+.home-page .btn:hover {
+  background: #d6b288;
+  color: #171b17;
+}
+
+.home-page .nav__links a.btn { color: #171b17; }
+
+.home-page .arrival__card,
+.home-page .favourite__card {
+  background: rgba(29, 34, 29, .92);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .22);
+}
+
+.home-page .arrival__content span,
+.home-page .favourite__content span {
+  border-color: rgba(242, 240, 232, .55);
+}
+
+.home-page .arrival__content a,
+.home-page .favourite__content a {
+  color: #b9c1b6;
+}
+
+.home-page .sale {
+  background: linear-gradient(100deg, rgba(42, 57, 47, .92), rgba(25, 31, 27, .96));
+  border-block: 1px solid rgba(242, 240, 232, .1);
+}
+
+.home-page .promo {
+  background: rgba(29, 34, 29, .88);
+  border-top: 1px solid rgba(242, 240, 232, .1);
+}
+
+.home-page .promo__container input {
+  background: #121611;
+  border-color: rgba(242, 240, 232, .35);
+  color: #f2f0e8;
+}
+
+.home-page .promo__container input::placeholder { color: #aeb6aa; }
+
+.home-page .venyora__promise img {
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .32);
+}
+
+.home-page footer {
+  background: #0b0e0b;
+  border-top: 1px solid rgba(242, 240, 232, .12);
+}
+
+.home-page .footer__bar { border-color: rgba(242, 240, 232, .12); color: #9ba598; }
+
+@media (max-width: 768px) {
+  .home-page .nav__links { background: #171b17; border-bottom: 1px solid rgba(242, 240, 232, .12); }
+  .home-page .nav__menu__btn { color: #f2f0e8; }
+}
+
+/* Shared theme control and mobile safety net. */
+.theme-toggle { align-items: center; background: transparent; border: 1px solid currentColor; border-radius: 999px; color: inherit; cursor: pointer; display: inline-flex; font: 600 .68rem "Montserrat", sans-serif; gap: .35rem; letter-spacing: .04em; padding: .45rem .65rem; text-transform: uppercase; transition: background .2s, color .2s; }
+.theme-toggle:hover { background: #d6b288; border-color: #d6b288; color: #171b17; }
+
+body.home-page[data-theme="light"] { --primary-color: #1a1a1a; --secondary-color: #f2f2f2; --white: #fff; background: #f8f7f3; color: #1a1a1a; }
+.home-page[data-theme="light"] nav { border-color: rgba(26,26,26,.12); }.home-page[data-theme="light"] .nav__logo a, .home-page[data-theme="light"] .nav__links a, .home-page[data-theme="light"] a, .home-page[data-theme="light"] .section__header, .home-page[data-theme="light"] .arrival__content h4, .home-page[data-theme="light"] .favourite__content h4 { color: #1a1a1a; }.home-page[data-theme="light"] .header__content h1 span, .home-page[data-theme="light"] .sale__content h2 span { -webkit-text-stroke-color: #1a1a1a; }.home-page[data-theme="light"] .header__content p, .home-page[data-theme="light"] .promo__container p { color: #555; }.home-page[data-theme="light"] .arrival__card, .home-page[data-theme="light"] .favourite__card { background: #fff; box-shadow: 5px 5px 20px rgba(0,0,0,.1); }.home-page[data-theme="light"] .arrival__content span, .home-page[data-theme="light"] .favourite__content span { border-color: #1a1a1a; }.home-page[data-theme="light"] .arrival__content a, .home-page[data-theme="light"] .favourite__content a { color: #666; }.home-page[data-theme="light"] .sale { background: #e8e6df; border-color: #dedbd3; }.home-page[data-theme="light"] .sale__content h2 { color: #1a1a1a; }.home-page[data-theme="light"] .sale__content p { color: #555; }.home-page[data-theme="light"] .promo { background: #eeeae2; }.home-page[data-theme="light"] .promo__container input { background: #fff; border-color: #ccc; color: #1a1a1a; }.home-page[data-theme="light"] .nav__links a.btn { color: #fff; }
+
+@media (max-width: 768px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+  img, video, iframe { max-width: 100%; }
+  .section__container { padding-left: 1rem; padding-right: 1rem; }
+  .theme-toggle-item { align-self: stretch; }.theme-toggle { justify-content: center; min-height: 2.7rem; width: 100%; }
+  .home-page[data-theme="light"] .nav__links { background: #fff; border-color: rgba(26,26,26,.12); }.home-page[data-theme="light"] .nav__menu__btn { color: #1a1a1a; }
+}
+
+@media (max-width: 420px) {
+  .section__header { font-size: 2rem; }
+  .header__content h1 { font-size: 2.2rem; line-height: 1.12; }
+  .promo__container form, .form-row { gap: .7rem; }
 }
 
 /* ── Sale section mobile ── */

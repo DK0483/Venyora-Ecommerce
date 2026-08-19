@@ -272,9 +272,29 @@
             }
             .form-row { grid-template-columns: 1fr; }
         }
+        /* Premium dark contact theme; the navigation toggle switches to light mode. */
+        body.contact-page { background: radial-gradient(circle at 12% 0%, #29382e, transparent 34rem), #111410; color: #f2f0e8; }
+        .contact-page nav { background: rgba(17,20,16,.9); border-bottom: 1px solid rgba(242,240,232,.12); max-width: none; padding-inline: max(1rem, calc((100vw - 1200px) / 2)); }
+        .contact-page .nav__logo a, .contact-page .nav__links a { color: #f2f0e8; }
+        .contact-page .contact-hero { background: linear-gradient(120deg, #152018, #111410); border-bottom: 1px solid rgba(242,240,232,.1); }
+        .contact-page .contact-layout { background: rgba(25,30,25,.8); border: 1px solid rgba(242,240,232,.1); border-radius: 18px; padding: 0 3rem; }
+        .contact-page .contact-info { border-color: rgba(242,240,232,.13); }
+        .contact-page .contact-info h2, .contact-page .contact-form-panel h2, .contact-page .info-item__text p { color: #f2f0e8; }
+        .contact-page .contact-info > p, .contact-page .contact-form-panel > p { color: #b8c1b8; }
+        .contact-page .info-item__icon { background: #d6b288; color: #172018; }
+        .contact-page .social-links a { border-color: rgba(242,240,232,.24); color: #d6b288; }
+        .contact-page .social-links a:hover { background: #d6b288; border-color: #d6b288; color: #172018; }
+        .contact-page .form-group input, .contact-page .form-group textarea, .contact-page .form-group select { background: #121711; border-color: rgba(242,240,232,.2); color: #f2f0e8; }
+        .contact-page .form-group input:focus, .contact-page .form-group textarea:focus, .contact-page .form-group select:focus { border-color: #d6b288; box-shadow: 0 0 0 3px rgba(214,168,83,.14); }
+        .contact-page .submit-btn { background: #d6b288; color: #172018; }.contact-page .submit-btn:hover { background: #eee7db; }
+        .contact-page .contact-divider { border-color: rgba(242,240,232,.12); }
+        body.contact-page[data-theme="light"] { background: #f7f6f1; color: #111; }
+        .contact-page[data-theme="light"] nav { background: rgba(255,255,255,.93); border-color: #e5e2da; }.contact-page[data-theme="light"] .nav__logo a, .contact-page[data-theme="light"] .nav__links a { color: #111; }
+        .contact-page[data-theme="light"] .contact-hero { background: #111; }.contact-page[data-theme="light"] .contact-layout { background: #fff; border-color: #e8e8e4; }.contact-page[data-theme="light"] .contact-info { border-color: #e8e8e4; }.contact-page[data-theme="light"] .contact-info h2, .contact-page[data-theme="light"] .contact-form-panel h2, .contact-page[data-theme="light"] .info-item__text p { color: #111; }.contact-page[data-theme="light"] .contact-info > p, .contact-page[data-theme="light"] .contact-form-panel > p { color: #666; }.contact-page[data-theme="light"] .form-group input, .contact-page[data-theme="light"] .form-group textarea, .contact-page[data-theme="light"] .form-group select { background: #fff; border-color: #e0e0db; color: #111; }
+        @media (max-width: 768px) { .contact-page .contact-layout { margin: 2rem 1rem; padding: 0 1.25rem; }.contact-page .contact-hero { padding: 3.5rem 1.25rem 3rem; }.contact-page .toast { bottom: 1rem; left: 1rem; right: 1rem; max-width: none; } }
     </style>
 </head>
-<body>
+<body class="contact-page">
     <nav>
       <div class="nav__header">
         <div class="nav__logo"><a href="index.html">VENYORA</a></div>

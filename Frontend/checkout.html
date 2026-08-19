@@ -309,6 +309,17 @@ async function getSelectedAddress() {
   return addresses.find(a => a._id === selectedAddressId);
 }
 
+function toShippingInfo(address) {
+  return {
+    fullName: address.fullName,
+    address: [address.houseNumber, address.area, address.landmark].filter(Boolean).join(", "),
+    city: address.city,
+    state: address.state,
+    zip: address.pincode,
+    phone: address.mobile
+  };
+}
+
 /* ================= HANDLE PLACE ORDER ================= */
 async function handlePlaceOrder() {
   if (!selectedAddressId) return;
@@ -319,13 +330,14 @@ async function handlePlaceOrder() {
   if (!selectedAddress) { alert("Invalid address selected"); return; }
 
   // COD — same as before, no Razorpay
+  const shippingInfo = toShippingInfo(selectedAddress);
   if (selectedPayment === "cod") {
-    await placeCODOrder(selectedAddress);
+    await placeCODOrder(shippingInfo);
     return;
   }
 
   // Card or UPI — open Razorpay
-  await initiateRazorpayPayment(selectedAddress, selectedPayment);
+  await initiateRazorpayPayment(shippingInfo, selectedPayment);
 }
 
 /* ================= COD ORDER ================= */

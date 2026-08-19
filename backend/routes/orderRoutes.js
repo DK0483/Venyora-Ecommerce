@@ -2,13 +2,16 @@ const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const Order = require("../models/order");
 const Cart = require("../models/cart");
+const { checkoutLimiter } = require("../middleware/rateLimiters");
+const { failValidation, shippingValidators } = require("../middleware/validators");
+const audit = require("../utils/audit");
 
 const router = express.Router();
 
 /* ======================================================
    CREATE ORDER
 ====================================================== */
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, checkoutLimiter, [...shippingValidators, failValidation], async (req, res) => {
   try {
     const { shippingInfo, paymentMethod } = req.body;
     const userId = req.user.id;
@@ -43,6 +46,7 @@ router.post("/", authMiddleware, async (req, res) => {
     });
 
     await order.save();
+    await audit(req, "ORDER_CREATED", "Order", order._id, { paymentMethod, totalAmount });
 
     // Clear cart
     cart.items = [];
@@ -74,6 +78,10 @@ router.get("/:id", authMiddleware, async (req, res) => {
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.user.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Not authorized" });
     }
 
     res.json(order);
@@ -108,6 +116,7 @@ router.put("/cancel/:id", authMiddleware, async (req, res) => {
 
     order.status = "Cancelled";
     await order.save();
+    await audit(req, "ORDER_CANCELLED", "Order", order._id);
 
     res.json({ message: "Order cancelled successfully" });
 
