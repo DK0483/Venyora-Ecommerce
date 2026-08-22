@@ -16,15 +16,18 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <h2>VENYORA</h2>
+    <div class="admin-brand"><span class="brand-mark">V</span><div><h2>VENYORA</h2><p>STORE OPERATIONS</p></div></div>
+    <p class="sidebar-label">Workspace</p>
     <ul>
-      <li onclick="loadDashboard()">📊 Dashboard</li>
-      <li onclick="loadProducts()">🛍 Products</li>
-      <li onclick="loadOrders()">📦 Orders</li>
-      <li onclick="loadUsers()">👥 Users</li>
-      <li onclick="toggleDarkMode()">🌙 Dark Mode</li>
-      <li onclick="logout()">🚪 Logout</li>
+      <li class="active" onclick="loadDashboard()"><span>▦</span> Dashboard</li>
+      <li onclick="loadProducts()"><span>◈</span> Products</li>
+      <li onclick="loadOrders()"><span>□</span> Orders</li>
+      <li onclick="loadUsers()"><span>◎</span> Customers</li>
     </ul>
+    <div class="sidebar-bottom">
+      <button class="sidebar-control" onclick="toggleDarkMode()"><span>◐</span> Appearance</button>
+      <button class="sidebar-control logout-control" onclick="logout()"><span>↗</span> Sign out</button>
+    </div>
   </aside>
 
   <!-- MAIN CONTENT -->
