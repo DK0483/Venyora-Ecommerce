@@ -1977,6 +1977,40 @@ body.home-page[data-theme="light"] { --primary-color: #1a1a1a; --secondary-color
   .promo__container form, .form-row { gap: .7rem; }
 }
 
+/* Keep the intentionally dark footer readable in homepage light mode. */
+.home-page[data-theme="light"] footer { background: #0b0e0b; }
+.home-page[data-theme="light"] .footer__col .footer__logo a,
+.home-page[data-theme="light"] .footer__col h4,
+.home-page[data-theme="light"] .footer__socials a { color: #f2f0e8; }
+.home-page[data-theme="light"] .footer__col p,
+.home-page[data-theme="light"] .footer__links a,
+.home-page[data-theme="light"] .footer__bar { color: #b8c1b8; }
+.home-page[data-theme="light"] .footer__links a:hover,
+.home-page[data-theme="light"] .footer__socials a:hover { color: #d6b288; }
+.home-page[data-theme="light"] .footer__bar { border-color: rgba(242, 240, 232, .12); }
+
+/* The shared mobile-nav rule is light by default; restore the dark header on
+   the homepage whenever dark mode is active. */
+@media (max-width: 768px) {
+  .home-page:not([data-theme="light"]) nav,
+  .home-page[data-theme="dark"] nav {
+    background: #111410;
+    border-bottom: 1px solid rgba(242, 240, 232, .12);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, .28);
+  }
+
+  .home-page:not([data-theme="light"]) .nav__links,
+  .home-page[data-theme="dark"] .nav__links {
+    background: #171b17;
+    border-top-color: rgba(242, 240, 232, .12);
+  }
+
+  .home-page:not([data-theme="light"]) .nav__logo a,
+  .home-page:not([data-theme="light"]) .nav__menu__btn,
+  .home-page[data-theme="dark"] .nav__logo a,
+  .home-page[data-theme="dark"] .nav__menu__btn { color: #f2f0e8; }
+}
+
 /* ── Sale section mobile ── */
 @media (max-width: 768px) {
   .sale__container {

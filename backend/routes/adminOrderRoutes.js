@@ -3,7 +3,6 @@ const router = express.Router();
 const Order = require("../models/order");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
-const audit = require("../utils/audit");
 
 // VIEW ALL ORDERS
 router.get("/", authMiddleware, adminMiddleware, async (req, res) => {
@@ -20,8 +19,6 @@ router.put("/status/:id", authMiddleware, adminMiddleware, async (req, res) => {
     { status },
     { new: true }
   );
-  if (!updated) return res.status(404).json({ message: "Order not found" });
-  await audit(req, "ADMIN_ORDER_STATUS_UPDATED", "Order", updated._id, { status });
 
   res.json(updated);
 });
